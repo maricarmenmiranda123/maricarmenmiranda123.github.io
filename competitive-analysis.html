@@ -12,7 +12,6 @@
     --bg: #FBF7F1; --surface: #FFFFFF; --surface-2: #F6F0E6; --border: #ECE2D2;
     --ink: #241F19; --ink-soft: #5C5245; --muted: #94897A;
     --accent: #5B3FF0; --accent-ink: #FFFFFF; --accent-soft: #EFEAFD; --accent-border: #D9CDFB;
-    --warn: #B5741B; --warn-soft: #FBF0DE; --warn-border: #EEDBAF;
     --shadow: 0 1px 2px rgba(36,31,25,.04), 0 8px 24px -12px rgba(36,31,25,.14);
     --radius: 18px;
   }
@@ -21,7 +20,6 @@
       --bg: #19140F; --surface: #221C15; --surface-2: #29221A; --border: #3A3124;
       --ink: #F5EFE6; --ink-soft: #CBC0AF; --muted: #948A7A; --accent: #9C82FF;
       --accent-ink: #16111F; --accent-soft: #2C2440; --accent-border: #4A3D74;
-      --warn: #E3B15B; --warn-soft: #362B14; --warn-border: #55461F;
       --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 28px -14px rgba(0,0,0,.6);
     }
   }
@@ -29,7 +27,6 @@
     --bg: #19140F; --surface: #221C15; --surface-2: #29221A; --border: #3A3124;
     --ink: #F5EFE6; --ink-soft: #CBC0AF; --muted: #948A7A; --accent: #9C82FF;
     --accent-ink: #16111F; --accent-soft: #2C2440; --accent-border: #4A3D74;
-    --warn: #E3B15B; --warn-soft: #362B14; --warn-border: #55461F;
     --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 28px -14px rgba(0,0,0,.6);
   }
 
@@ -74,15 +71,24 @@
   @media (max-width: 760px) { .bento { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 420px) { .bento { grid-template-columns: 1fr; } }
   .bcard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 16px; box-shadow: var(--shadow); }
-  .bcard.hero { background: var(--accent-soft); border: 1.5px solid var(--accent); }
   .bcard .bname { font-family: "Quicksand"; font-weight: 700; font-size: 14px; margin-bottom: 12px; }
-  .bcard.hero .bname { color: var(--accent); }
   .bcard .brow { display: flex; justify-content: space-between; gap: 8px; font-size: 12.5px; padding: 7px 0; border-top: 1px solid var(--border); }
-  .bcard.hero .brow { border-top-color: var(--accent-border); }
   .bcard .brow:first-of-type { border-top: none; }
   .bcard .brow .k { color: var(--muted); }
   .bcard .brow .v { color: var(--ink); font-weight: 600; text-align: right; }
-  .bcard.hero .brow .v { color: var(--accent); }
+
+  .bcard.hero-wide {
+    grid-column: 1 / -1;
+    background: var(--accent-soft); border: 1.5px solid var(--accent);
+    display: flex; align-items: center; flex-wrap: wrap; gap: 22px 32px;
+    padding: 18px 22px;
+  }
+  .bcard.hero-wide .bname { color: var(--accent); margin: 0; flex-shrink: 0; font-size: 15px; }
+  .bcard.hero-wide .stats { display: flex; flex-wrap: wrap; gap: 0; flex: 1; }
+  .bcard.hero-wide .stat { display: flex; flex-direction: column; gap: 3px; padding: 0 26px; border-left: 1px solid var(--accent-border); }
+  .bcard.hero-wide .stat:first-child { border-left: none; padding-left: 0; }
+  .bcard.hero-wide .stat .k { font-size: 11px; color: var(--ink-soft); font-weight: 600; }
+  .bcard.hero-wide .stat .v { font-family: "Quicksand"; font-weight: 700; color: var(--accent); font-size: 14px; }
 
   /* ---- All platforms: radar ---- */
   .radar-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px; }
@@ -132,10 +138,6 @@
   .split li:last-child { margin-bottom: 0; }
   .claim li { color: var(--ink-soft); font-size: 15px; }
   .win li { color: var(--ink); font-size: 15px; font-weight: 500; }
-
-  .callout { background: var(--warn-soft); border: 1px solid var(--warn-border); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 22px; }
-  .callout h3 { margin: 0 0 6px; font-size: 13px; font-weight: 700; color: var(--warn); }
-  .callout p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--ink-soft); }
 
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 22px; }
   .card-head { padding: 18px 22px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
@@ -192,7 +194,6 @@
   table.facts td:first-child { color: var(--muted); width: 34%; }
   table.facts td:nth-child(2) { color: var(--ink-soft); }
   table.facts td:nth-child(3) { color: var(--accent); font-weight: 600; }
-  table.facts .flag { color: var(--warn); font-size: 11px; font-style: italic; display: block; margin-top: 2px; }
 </style>
 </head>
 <body>
@@ -212,21 +213,36 @@ const BENTO = [
   { name: "Benable", hero: true, cost: "$50-80 / creator", managed: "Yes", guarantee: "Yes", rights: "Organic incl., ads extra", pool: "1M+" },
   { name: "JoinBrands", cost: "$25-69 / creator", managed: "Add-on", guarantee: "Refund only", rights: "Full", pool: "500K+" },
   { name: "Billo", cost: "$150-250 / video", managed: "No", guarantee: "No", rights: "Full", pool: "5K" },
+  { name: "Home From College", cost: "$194 / creator", managed: "Self-serve default", guarantee: "2-strike + backfill", rights: "Full (organic+paid)", pool: "1M profiles" },
   { name: "Collabstr", cost: "$271 / creator", managed: "No", guarantee: "No", rights: "Included", pool: "100K" },
   { name: "Insense", cost: "$460 / creator", managed: "Add-on", guarantee: "No", rights: "Full", pool: "125K" },
   { name: "Social Cat", cost: "$750+ / creator", managed: "Add-on ($250/collab)", guarantee: "No", rights: "Partial (opted-in only)", pool: "90K + 500K scraped" },
 ];
 
 function renderBento() {
-  return `<div class="bento">${BENTO.map(b => `
-    <div class="bcard ${b.hero ? "hero" : ""}">
+  const hero = BENTO.find(b => b.hero);
+  const rest = BENTO.filter(b => !b.hero);
+  const heroHtml = `
+    <div class="bcard hero-wide">
+      <div class="bname">${hero.name}</div>
+      <div class="stats">
+        <div class="stat"><span class="k">Cost</span><span class="v">${hero.cost}</span></div>
+        <div class="stat"><span class="k">Managed</span><span class="v">${hero.managed}</span></div>
+        <div class="stat"><span class="k">Guarantee</span><span class="v">${hero.guarantee}</span></div>
+        <div class="stat"><span class="k">Rights</span><span class="v">${hero.rights}</span></div>
+        <div class="stat"><span class="k">Pool</span><span class="v">${hero.pool}</span></div>
+      </div>
+    </div>`;
+  const restHtml = rest.map(b => `
+    <div class="bcard">
       <div class="bname">${b.name}</div>
       <div class="brow"><span class="k">Cost</span><span class="v">${b.cost}</span></div>
       <div class="brow"><span class="k">Managed</span><span class="v">${b.managed}</span></div>
       <div class="brow"><span class="k">Guarantee</span><span class="v">${b.guarantee}</span></div>
       <div class="brow"><span class="k">Rights</span><span class="v">${b.rights}</span></div>
       <div class="brow"><span class="k">Pool</span><span class="v">${b.pool}</span></div>
-    </div>`).join("")}</div>`;
+    </div>`).join("");
+  return `<div class="bento">${heroHtml}${restHtml}</div>`;
 }
 
 /* ---------------- All platforms: radar ---------------- */
@@ -246,6 +262,7 @@ const RADAR_COMPARE = {
     joinbrands: { us: "$4,999 / month", them: "$6,875 / month", line: "Fully managed, 100 creators a month costs $6,875 with them and $4,999 with us. On their self-serve side they can hit $25 a video, but that needs a 100-post commitment and is before their fee." },
     collabstr: { us: "$50-80 / creator", them: "$250+ / creator", line: "Even Collabstr's cheapest creators start at $250. Benable runs $50 to $80 a creator, gifted, no bidding involved." },
     socialcat: { us: "$50-80 / creator", them: "$750+ / creator, managed", line: "Their managed option runs about $750 to $800 a creator once you add the management fee and influencer budget. Their subscription tiers look cheaper on paper, $99 to $299 a month, but that's self-serve, gifted only, and capped at 30 creators total." },
+    hfc: { us: "$50-80 / creator", them: "$194 / creator", line: "Their own in-feed benchmark is $150 a post plus their subscription, about $194 a creator once you add it up. Benable runs $50 to $80, though theirs bundles paid ad rights in, ours doesn't." },
   },
   management: {
     insense: { us: "Included", them: "$4,600/mo add-on", line: "Insense's managed tier is a $4,600 a month add-on. It's included with us from your first creator." },
@@ -253,6 +270,7 @@ const RADAR_COMPARE = {
     joinbrands: { us: "Included", them: "$4,000/mo add-on", line: "Their managed service is $4,000 a month, on top of what you pay creators. Ours is one flat, lower price." },
     collabstr: { us: "Included", them: "Not offered", line: "There's no management option at any price on Collabstr. You source, negotiate, and chase everyone yourself." },
     socialcat: { us: "Included", them: "$250/collab add-on", line: "Social Cat's management fee is $250 per collaboration, on top of the influencer budget. Benable's management is built into the price, not billed separately." },
+    hfc: { us: "Included", them: "Self-serve default", line: "Home From College's standard tier is your team running the workflow end to end. Premium tiers add a specialist for advice, not full management, and their actual managed service starts at $150K. Benable's management is included at any size." },
   },
   guarantee: {
     insense: { us: "Contract + card on file", them: "Contract only", line: "Insense has contracts, but no card on file, so there's not much teeth if a creator ghosts." },
@@ -260,6 +278,7 @@ const RADAR_COMPARE = {
     joinbrands: { us: "Contract + card on file", them: "Refund on cancel", line: "JoinBrands refunds you if a creator cancels, which is reactive. We prevent the no-show up front with a signed contract and a card on file." },
     collabstr: { us: "Contract + card on file", them: "None", line: "Collabstr has no posting guarantee at all. If a creator doesn't deliver, that's on you." },
     socialcat: { us: "Contract + card on file", them: "None", line: "Social Cat has no recourse when gifted product doesn't convert to a post. Their own words: that's the biggest problem with product seeding in general." },
+    hfc: { us: "Contract + card on file", them: "2-strike policy, auto-backfill", line: "Home From College will backfill a student who misses a deadline, and restrict repeat offenders after two strikes. That's a real reliability mechanism, though it protects the workflow, not your product spend the way a card on file does." },
   },
   rights: {
     insense: { us: "Organic incl., ads ~$25-75/video", them: "Full, in perpetuity", line: "Insense bundles full rights, including paid ads, at every tier. We include organic use for free; running a post as an ad costs about $25 to $75 per video, and only for creators who opted into paid usage." },
@@ -267,6 +286,7 @@ const RADAR_COMPARE = {
     joinbrands: { us: "Organic incl., ads ~$25-75/video", them: "Full, included", line: "JoinBrands includes full rights, paid ads included, at every tier. We charge separately for ad usage, about $25 to $75 a video, and only once you pick the pieces you actually want to run." },
     collabstr: { us: "Organic incl., ads ~$25-75/video", them: "Included, negotiable", line: "Collabstr includes rights but leaves room for negotiated add-ons, similar in spirit to Benable. Benable's organic use is included; paid ad usage is priced per video after the fact." },
     socialcat: { us: "Organic incl., ads ~$25-75/video", them: "Guaranteed for opted-in creators only", line: "Social Cat only guarantees usage rights for their 90K opted-in creators. Their other 500K, found by scraping, may need separately negotiated rights. Benable includes organic for everyone; paid ad usage is a $25 to $75 per-video add-on." },
+    hfc: { us: "Organic incl., ads ~$25-75/video", them: "Full, organic and paid, included", line: "Home From College includes paid ad rights in their base $150/post rate, no separate charge. Benable includes organic for everyone; paid ad usage is billed separately, $25 to $75 a video. This is a real edge for them." },
   },
   data: {
     insense: { us: "Not yet", them: "No", line: "Neither of us has ad-performance data tied to individual creators today." },
@@ -274,6 +294,7 @@ const RADAR_COMPARE = {
     joinbrands: { us: "Not yet", them: "No", line: "Neither platform offers this today." },
     collabstr: { us: "Not yet", them: "No", line: "Neither platform offers this today." },
     socialcat: { us: "Not yet", them: "No", line: "Neither platform offers ad-performance data tied to individual creators today." },
+    hfc: { us: "Not yet", them: "Meta integration, real-time", line: "Home From College pulls in content and engagement stats in real time once a creator posts, live but recent, launched about 2 months before this call. Benable has nothing like this yet." },
   },
   pool: {
     insense: { us: "1M+", them: "125K", line: "We're about 8 times bigger, 1M+ creators to their 125K." },
@@ -281,6 +302,7 @@ const RADAR_COMPARE = {
     joinbrands: { us: "1M+", them: "500K+", line: "They lean on scale as a selling point, but we're actually larger too, 1M+ to their 500K+." },
     collabstr: { us: "1M+", them: "100K vetted", line: "We're about 10 times bigger, 1M+ versus their 100K vetted creators." },
     socialcat: { us: "1M+", them: "90K opted-in + 500K scraped", line: "Benable's pool is over 1M. Social Cat's is smaller and split in two: 90K creators who actually signed up, plus a larger scraped database where outreach and rights work differently." },
+    hfc: { us: "1M+", them: "1M profiles, 3,500+ campuses", line: "Both platforms are around 1M. Theirs skews entirely college-age and campus-based; Benable's is broader." },
   },
 };
 
@@ -291,8 +313,9 @@ const RADAR_SCORES = {
   joinbrands: [4, 3, 3, 5, 2, 5],
   collabstr:  [2, 1, 1, 4, 2, 3],
   socialcat:  [2, 3, 1, 3, 2, 4],
+  hfc:        [2, 3, 3, 5, 3, 4],
 };
-const RADAR_NAMES = { insense: "Insense", billo: "Billo", joinbrands: "JoinBrands", collabstr: "Collabstr", socialcat: "Social Cat" };
+const RADAR_NAMES = { insense: "Insense", billo: "Billo", joinbrands: "JoinBrands", collabstr: "Collabstr", socialcat: "Social Cat", hfc: "Home From College" };
 const VB = 400, RCX = 200, RCY = 200, RR = 78;
 let radarActive = "insense";
 let radarSelectedAxis = null;
@@ -569,10 +592,43 @@ const DATA = {
       { label: "Known gap", them: "Engagement rate is self-calculated in-house, not pulled live from Instagram or TikTok", us: "No Meta ad-performance layer yet" },
     ],
   },
+  hfc: {
+    name: "Home From College",
+    claimList: [
+      "We're the largest Gen Z and college database out there, 1M+ profiles across 3,500+ campuses.",
+      "We're not just content, brands run full ambassador programs, campus activations, and career-style gigs through us.",
+    ],
+    winList: [
+      "That's a genuinely different product. If a brand wants in-feed content on brief, gifted or paid, that's what Benable is built for.",
+      "Their own benchmark for a nano-creator in-feed post is $150, plus their subscription. Benable runs $50 to $80 a creator.",
+    ],
+    mode: "perUnit",
+    unit: "creators",
+    defaultN: 50,
+    themRate: 194,
+    usRate: 58,
+    unitLabel: "per creator, in-feed UGC benchmark",
+    rows: [
+      { label: "Platform subscription", amount: 40, note: "$2,000/mo Premium Plus tier, split across 50 creators" },
+      { label: "Creator compensation", amount: 150, note: "their own stated benchmark for a nano creator, in-feed post" },
+      { label: "Platform fee, 2.9%", amount: 4, note: "their lowest tier, full self-serve runs up to 20%" },
+    ],
+    totalLabel: "Total per creator",
+    caveat: "This is their own stated $150/post benchmark, not gifted, they don't allow pure gifting. Full usage rights, organic and paid, are included in that price. Benable's own rate runs $50-80/creator, cheaper at scale, but ad usage is a separate add-on.",
+    leavesOut: [
+      "They don't allow gifted-only collaborations. Every gig requires real cash compensation, by design, \"students perceive us as a place to always earn dollars.\"",
+      "Their managed service starts at $150K minimum, a completely different scale than the self-serve numbers above, not really comparable to Benable's typical program size.",
+      "The self-serve tier is still your team running the workflow end to end. Premium tiers add a specialist, but even then it's advising, not full management.",
+    ],
+    facts: [
+      { label: "Usage rights", them: "Full rights, organic and paid, included in the base rate", us: "Organic included; paid ad usage is ~$25-75/video, opt-in creators only" },
+      { label: "Known gap", them: "Won't do pure gifting, cash compensation required on every gig", us: "No campus or ambassador-program offering" },
+    ],
+  },
 };
 
-const order = ["all", "insense", "billo", "joinbrands", "collabstr", "socialcat"];
-const labels = { all: "All platforms" };
+const order = ["all", "insense", "billo", "joinbrands", "collabstr", "socialcat", "hfc"];
+const labels = { all: "All platforms", hfc: "Home From College" };
 const tabsEl = document.getElementById("tabs");
 const panelsEl = document.getElementById("panels");
 const money = n => "$" + Math.round(n).toLocaleString();
@@ -632,6 +688,7 @@ function renderPanel(key) {
       <div class="card-head">
         <div>
           <h2>${isProgram ? "Fully managed, side by side" : "What it actually costs, side by side"}</h2>
+          <p class="sub">Edit the number on the right to match your own volume, the totals update as you type.</p>
         </div>
         <div class="calc-row">
           for <input type="number" min="1" id="n-${key}" value="${d.defaultN}"> ${d.unit} a month
