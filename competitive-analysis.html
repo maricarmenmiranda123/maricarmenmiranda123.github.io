@@ -65,9 +65,15 @@
   .section-head { margin: 4px 0 18px; }
   .section-head h2 { font-size: 16px; font-weight: 700; margin: 0 0 3px; }
   .section-head .sub { font-size: 13.5px; color: var(--muted); margin: 0; line-height: 1.5; }
+  .how-to { margin: 0 0 4px; }
+  .how-to-label { font-size: 13.5px; font-weight: 700; color: var(--ink-soft); margin: 0 0 8px; }
+  .how-to ol { margin: 0; padding-left: 20px; }
+  .how-to li { font-size: 13.5px; color: var(--muted); line-height: 1.55; margin-bottom: 6px; }
+  .how-to li:last-child { margin-bottom: 0; }
 
-  .bento { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 44px; }
+  .bento { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 44px; }
   @media (max-width: 760px) { .bento { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 420px) { .bento { grid-template-columns: 1fr; } }
   .bcard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 16px; box-shadow: var(--shadow); }
   .bcard.hero { background: var(--accent-soft); border: 1.5px solid var(--accent); }
   .bcard .bname { font-family: "Quicksand"; font-weight: 700; font-size: 14px; margin-bottom: 12px; }
@@ -204,11 +210,12 @@
 <script>
 /* ---------------- All platforms: bento cards ---------------- */
 const BENTO = [
-  { name: "Benable", hero: true, cost: "$50-58 / creator", managed: "Yes", guarantee: "Yes", rights: "Full*", pool: "1M+" },
+  { name: "Benable", hero: true, cost: "$50-80 / creator", managed: "Yes", guarantee: "Yes", rights: "Organic incl., ads extra", pool: "1M+" },
   { name: "JoinBrands", cost: "$25-69 / creator", managed: "Add-on", guarantee: "Refund only", rights: "Full", pool: "500K+" },
   { name: "Billo", cost: "$150-250 / video", managed: "No", guarantee: "No", rights: "Full", pool: "5K" },
   { name: "Collabstr", cost: "$271 / creator", managed: "No", guarantee: "No", rights: "Included", pool: "100K" },
   { name: "Insense", cost: "$460 / creator", managed: "Add-on", guarantee: "No", rights: "Full", pool: "125K" },
+  { name: "Social Cat", cost: "$750+ / creator", managed: "Add-on ($250/collab)", guarantee: "No", rights: "Partial (opted-in only)", pool: "90K + 500K scraped" },
 ];
 
 function renderBento() {
@@ -220,8 +227,7 @@ function renderBento() {
       <div class="brow"><span class="k">Guarantee</span><span class="v">${b.guarantee}</span></div>
       <div class="brow"><span class="k">Rights</span><span class="v">${b.rights}</span></div>
       <div class="brow"><span class="k">Pool</span><span class="v">${b.pool}</span></div>
-    </div>`).join("")}</div>
-    <p style="font-size:12px;color:var(--muted);margin:-32px 0 44px;">* not yet confirmed with Tony, see note below</p>`;
+    </div>`).join("")}</div>`;
 }
 
 /* ---------------- All platforms: radar ---------------- */
@@ -236,51 +242,58 @@ const RADAR_AXES = [
 
 const RADAR_COMPARE = {
   price: {
-    insense: { us: "$58 / creator", them: "$460 / creator", line: "Insense runs about $460 a creator once you add their management fee, the creator payment, and commission. We do it for $58, because our creators are gifted, not paid." },
-    billo: { us: "$58 / creator", them: "$150-250 / video", line: "Billo's typical video runs $150 to $200, before their $89 editing add-on. We run about a third of that, fully managed." },
+    insense: { us: "$50-80 / creator", them: "$460 / creator", line: "Insense runs about $460 a creator once you add their management fee, the creator payment, and commission. Benable runs $50 to $80 a creator, cheaper at scale, because our creators are gifted, not paid." },
+    billo: { us: "$50-80 / creator", them: "$150-250 / video", line: "Billo's typical video runs $150 to $200, before their $89 editing add-on. Benable runs $50 to $80 a creator, fully managed, cheaper at scale." },
     joinbrands: { us: "$4,999 / month", them: "$6,875 / month", line: "Fully managed, 100 creators a month costs $6,875 with them and $4,999 with us. On their self-serve side they can hit $25 a video, but that needs a 100-post commitment and is before their fee." },
-    collabstr: { us: "$58 / creator", them: "$250+ / creator", line: "Even Collabstr's cheapest creators start at $250. Ours run $58, gifted, no bidding involved." },
+    collabstr: { us: "$50-80 / creator", them: "$250+ / creator", line: "Even Collabstr's cheapest creators start at $250. Benable runs $50 to $80 a creator, gifted, no bidding involved." },
+    socialcat: { us: "$50-80 / creator", them: "$750+ / creator, managed", line: "Their managed option runs about $750 to $800 a creator once you add the management fee and influencer budget. Their subscription tiers look cheaper on paper, $99 to $299 a month, but that's self-serve, gifted only, and capped at 30 creators total." },
   },
   management: {
     insense: { us: "Included", them: "$4,600/mo add-on", line: "Insense's managed tier is a $4,600 a month add-on. It's included with us from your first creator." },
     billo: { us: "Included", them: "Not offered", line: "Billo has no true management tier. You personally review every applicant yourself, even at their top level." },
     joinbrands: { us: "Included", them: "$4,000/mo add-on", line: "Their managed service is $4,000 a month, on top of what you pay creators. Ours is one flat, lower price." },
     collabstr: { us: "Included", them: "Not offered", line: "There's no management option at any price on Collabstr. You source, negotiate, and chase everyone yourself." },
+    socialcat: { us: "Included", them: "$250/collab add-on", line: "Social Cat's management fee is $250 per collaboration, on top of the influencer budget. Benable's management is built into the price, not billed separately." },
   },
   guarantee: {
     insense: { us: "Contract + card on file", them: "Contract only", line: "Insense has contracts, but no card on file, so there's not much teeth if a creator ghosts." },
     billo: { us: "Contract + card on file", them: "Unclear", line: "We asked Billo twice what happens when a creator misses a deadline. Both times, they dodged the question." },
     joinbrands: { us: "Contract + card on file", them: "Refund on cancel", line: "JoinBrands refunds you if a creator cancels, which is reactive. We prevent the no-show up front with a signed contract and a card on file." },
     collabstr: { us: "Contract + card on file", them: "None", line: "Collabstr has no posting guarantee at all. If a creator doesn't deliver, that's on you." },
+    socialcat: { us: "Contract + card on file", them: "None", line: "Social Cat has no recourse when gifted product doesn't convert to a post. Their own words: that's the biggest problem with product seeding in general." },
   },
   rights: {
-    insense: { us: "Full, in perpetuity*", them: "Full, in perpetuity", line: "Both platforms include full usage rights in perpetuity. This one's a wash, pending Tony confirming our own terms." },
-    billo: { us: "Full, in perpetuity*", them: "Full, in perpetuity", line: "Same on both sides here, full rights included, nothing to differentiate on, pending Tony confirming our own terms." },
-    joinbrands: { us: "Full, in perpetuity*", them: "Full, included", line: "JoinBrands includes full rights too. No real gap on this one, pending Tony confirming our own terms." },
-    collabstr: { us: "Full, in perpetuity*", them: "Included, negotiable", line: "Collabstr includes rights but leaves room for negotiated add-ons. Ours are meant to be full, no asterisks, but that's worth double-checking." },
+    insense: { us: "Organic incl., ads ~$25-75/video", them: "Full, in perpetuity", line: "Insense bundles full rights, including paid ads, at every tier. We include organic use for free; running a post as an ad costs about $25 to $75 per video, and only for creators who opted into paid usage." },
+    billo: { us: "Organic incl., ads ~$25-75/video", them: "Full, in perpetuity", line: "Billo bundles full rights at every price point. Ours covers organic for free, ad usage is a $25 to $75 per-video add-on on creators who opted in." },
+    joinbrands: { us: "Organic incl., ads ~$25-75/video", them: "Full, included", line: "JoinBrands includes full rights, paid ads included, at every tier. We charge separately for ad usage, about $25 to $75 a video, and only once you pick the pieces you actually want to run." },
+    collabstr: { us: "Organic incl., ads ~$25-75/video", them: "Included, negotiable", line: "Collabstr includes rights but leaves room for negotiated add-ons, similar in spirit to Benable. Benable's organic use is included; paid ad usage is priced per video after the fact." },
+    socialcat: { us: "Organic incl., ads ~$25-75/video", them: "Guaranteed for opted-in creators only", line: "Social Cat only guarantees usage rights for their 90K opted-in creators. Their other 500K, found by scraping, may need separately negotiated rights. Benable includes organic for everyone; paid ad usage is a $25 to $75 per-video add-on." },
   },
   data: {
     insense: { us: "Not yet", them: "No", line: "Neither of us has ad-performance data tied to individual creators today." },
     billo: { us: "Not yet", them: "Yes, Meta integration", line: "This is Billo's real edge: ROAS, CTR, and hook rate per creator, benchmarked against industry medians. We don't have this yet." },
     joinbrands: { us: "Not yet", them: "No", line: "Neither platform offers this today." },
     collabstr: { us: "Not yet", them: "No", line: "Neither platform offers this today." },
+    socialcat: { us: "Not yet", them: "No", line: "Neither platform offers ad-performance data tied to individual creators today." },
   },
   pool: {
     insense: { us: "1M+", them: "125K", line: "We're about 8 times bigger, 1M+ creators to their 125K." },
     billo: { us: "1M+", them: "5K", line: "Billo's pool is small by design, 5K total. Ours is over 1M." },
     joinbrands: { us: "1M+", them: "500K+", line: "They lean on scale as a selling point, but we're actually larger too, 1M+ to their 500K+." },
     collabstr: { us: "1M+", them: "100K vetted", line: "We're about 10 times bigger, 1M+ versus their 100K vetted creators." },
+    socialcat: { us: "1M+", them: "90K opted-in + 500K scraped", line: "Benable's pool is over 1M. Social Cat's is smaller and split in two: 90K creators who actually signed up, plus a larger scraped database where outreach and rights work differently." },
   },
 };
 
 const RADAR_SCORES = {
-  benable:    [5, 5, 5, 5, 2, 4],
+  benable:    [5, 5, 5, 3, 2, 4],
   insense:    [1, 3, 2, 5, 2, 3],
   billo:      [3, 1, 1, 5, 5, 1],
   joinbrands: [4, 3, 3, 5, 2, 5],
   collabstr:  [2, 1, 1, 4, 2, 3],
+  socialcat:  [2, 3, 1, 3, 2, 4],
 };
-const RADAR_NAMES = { insense: "Insense", billo: "Billo", joinbrands: "JoinBrands", collabstr: "Collabstr" };
+const RADAR_NAMES = { insense: "Insense", billo: "Billo", joinbrands: "JoinBrands", collabstr: "Collabstr", socialcat: "Social Cat" };
 const VB = 400, RCX = 200, RCY = 200, RR = 78;
 let radarActive = "insense";
 let radarSelectedAxis = null;
@@ -358,7 +371,14 @@ function renderAllPanel() {
     <div class="radar-card">
       <div class="section-head">
         <h2>The same six things, one shape</h2>
-        <p class="sub">How to read it: the bigger the filled purple shape, the better we do on that measure. Pick a competitor below to lay their dashed outline over ours, then tap an "i" on the chart for the real numbers behind any point.</p>
+        <div class="how-to">
+          <p class="how-to-label">How to read this chart</p>
+          <ol>
+            <li>The purple shape is Benable. The closer it reaches to an edge, the better Benable does on that measure.</li>
+            <li>Pick a competitor below to draw their outline, shown dashed, over it.</li>
+            <li>Tap the "i" next to any label to see the real numbers behind that point.</li>
+          </ol>
+        </div>
       </div>
       <div class="radar-controls">
         <span class="ctrl-label">Compare against</span>
@@ -420,13 +440,13 @@ const DATA = {
       { label: "Platform commission, 15%", amount: 30 },
     ],
     totalLabel: "Total per creator",
-    caveat: "Their quote is for 20 creators a month. Ours is scaled from a 50-creator program.",
+    caveat: "Their quote is for 20 creators a month. Benable's own rate runs $50-80/creator, cheaper at scale, not counting paid ad-usage rights.",
     leavesOut: [
       "Their dashboard shows who's about to miss a deadline, but nothing chases them for you. That follow-up is still on your team.",
       "The managed tier starts with an onboarding call to size the brief. Day-to-day sourcing still comes back to you unless you're on the dedicated add-on.",
     ],
     facts: [
-      { label: "Usage rights", them: "Full rights, in perpetuity", us: "Full rights, in perpetuity", flag: true },
+      { label: "Usage rights", them: "Full rights, in perpetuity", us: "Organic included; paid ad usage is ~$25-75/video, opt-in creators only" },
       { label: "Known gap", them: "No affiliate or sales tracking", us: "No Meta ad-performance layer yet" },
     ],
   },
@@ -449,23 +469,22 @@ const DATA = {
     rows: [
       { label: "Base video", amount: 99 },
       { label: "Premium creator add-on", amount: 50 },
-      { label: "Longer video, extras (up to)", amount: 101 },
     ],
-    totalLabel: "Typical total, per video",
-    caveat: "They charge per video, we charge per creator. One creator makes one video in both models, so the comparison holds. $175 is the midpoint of their $150-250 typical range.",
+    totalLabel: "Base + premium creator",
+    caveat: "They charge per video, we charge per creator, one video per creator in both models, so the comparison holds. The $149 total above is base + premium only; the $175 used below is Billo's own separately-stated working average, a different number on purpose. Benable's own rate runs $50-80/creator, cheaper at scale.",
     leavesOut: [
       "Even at their top tier ($5,000+ wallet), you still review all ~50 applicants a campaign gets and pick the 5 you want. Their success manager is a perk, not a replacement for that work.",
       "Editing ($89), organic posting, and partnership ads are all separate line items on top of the base video price.",
     ],
     facts: [
-      { label: "Usage rights", them: "Full rights, in perpetuity", us: "Full rights, in perpetuity", flag: true },
+      { label: "Usage rights", them: "Full rights, in perpetuity", us: "Organic included; paid ad usage is ~$25-75/video, opt-in creators only" },
       { label: "Known gap", them: "No clear late-deadline policy (asked twice, dodged)", us: "No Meta ad-performance layer yet" },
     ],
   },
   joinbrands: {
     name: "JoinBrands",
     claimList: [
-      "We connect you to half a million creators, more supply than anyone else in this list.",
+      "We connect you to half a million creators.",
       "Videos can run as low as $25, if you commit to 100 posts upfront.",
     ],
     winList: [
@@ -477,13 +496,13 @@ const DATA = {
     defaultN: 100,
     unitLabel: "fully managed, 100 creators a month",
     totalLabel: "Total per month",
-    caveat: "$4,999 is our Preferred Partner rate. Check current pricing before quoting it.",
+    caveat: "$4,999 is our Preferred Partner rate at 100 creators specifically ($49.99/creator). The calculator above extrapolates both sides from that single 100-creator data point using JoinBrands' own real formula; Benable's side assumes $49.99/creator holds at any volume typed in.",
     leavesOut: [
       "<b>Finding the creators:</b> you review about 5 profiles to find 1 that meets your bar, roughly 500 profiles a month to fill 100 spots.",
       "<b>Chasing late posts:</b> about 30% of their creators miss the deadline. That's around 30 creators you're checking in on and eventually escalating to support at any given time.",
     ],
     facts: [
-      { label: "Usage rights", them: "Full rights included", us: "Full rights in perpetuity", flag: true },
+      { label: "Usage rights", them: "Full rights included", us: "Organic included; paid ad usage is ~$25-75/video, opt-in creators only" },
       { label: "Reimbursement fraud risk", them: "Real, drives 95% of brands to reimbursement-only", us: "None, gifting has no upfront creator payment" },
     ],
   },
@@ -509,19 +528,51 @@ const DATA = {
       { label: "Transaction fee, 5%", amount: 13 },
     ],
     totalLabel: "Minimum total, per creator",
-    caveat: "This uses their cheapest listed rate. Most campaigns cost more than this.",
+    caveat: "Uses their cheapest listed rate, most campaigns cost more than this. Benable's own rate runs $50-80/creator, cheaper at scale.",
     leavesOut: [
       "There's no management tier to buy at any price. You personally review 20 to 50 bids per job, negotiate each one, and chase every delivery yourself.",
       "Their own team told us most churn is silent: brands quietly testing the channel and disappearing without ever saying what didn't work, so problems never get surfaced or fixed.",
     ],
     facts: [
-      { label: "Usage rights", them: "Included, negotiable add-ons possible", us: "Full rights in perpetuity", flag: true },
+      { label: "Usage rights", them: "Included, negotiable add-ons possible", us: "Organic included; paid ad usage is ~$25-75/video, opt-in creators only" },
       { label: "Known gap", them: "No Meta ad integration (on their roadmap)", us: "Smaller pool for celebrity-tier talent" },
+    ],
+  },
+  socialcat: {
+    name: "Social Cat",
+    claimList: [
+      "Subscription plans start at $99 a month for 5 creators, cancel anytime.",
+      "Most of our brands do gifted collaborations, that's what we're known for.",
+    ],
+    winList: [
+      "That $99 tier is self-serve and gifted only. You review every applicant yourself, and 40 to 50% still won't post, with no way to recover the product cost.",
+      "Their managed option runs about $750 a creator once you add the management fee and influencer budget, by their own rough math closer to $800. We do the same job for $58.",
+    ],
+    mode: "perUnit",
+    unit: "creators",
+    defaultN: 5,
+    themRate: 750,
+    usRate: 58,
+    unitLabel: "per creator, managed",
+    rows: [
+      { label: "Management fee", amount: 250, note: "per collaboration, their stated rate" },
+      { label: "Creator budget (avg)", amount: 500, note: "their own example, $2,500 for 5 creators" },
+    ],
+    totalLabel: "Total per creator, managed",
+    caveat: "From their demo call, for 5 collaborations a month. Their subscription tiers ($99-299/mo) are self-serve and gifted-only, capped at 30 creators a month with no option to scale higher. Benable's own rate runs $50-80/creator, cheaper at scale.",
+    leavesOut: [
+      "Subscription plans cap out at 30 creators a month, period. They told us they tried custom packages above that and discontinued the option.",
+      "Usage rights are only guaranteed for their 90K opted-in creators. Their other ~500K creators, found by scraping public profiles, may limit usage or need separately negotiated payment for rights.",
+      "No way to recover the cost of gifted product when a creator doesn't post. Their own words: \"that's the biggest problem with product seeding in general.\"",
+    ],
+    facts: [
+      { label: "Usage rights", them: "Guaranteed only for opted-in creators (90K); negotiated separately for the other ~500K", us: "Organic included; paid ad usage is ~$25-75/video, opt-in creators only" },
+      { label: "Known gap", them: "Engagement rate is self-calculated in-house, not pulled live from Instagram or TikTok", us: "No Meta ad-performance layer yet" },
     ],
   },
 };
 
-const order = ["all", "insense", "billo", "joinbrands", "collabstr"];
+const order = ["all", "insense", "billo", "joinbrands", "collabstr", "socialcat"];
 const labels = { all: "All platforms" };
 const tabsEl = document.getElementById("tabs");
 const panelsEl = document.getElementById("panels");
@@ -598,8 +649,8 @@ function renderPanel(key) {
             ${renderItemRows(d)}
             <tr class="total">
               ${isProgram
-                ? `<td>${d.totalLabel}</td><td id="them-total-${key}">-</td><td class="us-col">Included <span id="us-total-${key}">-</span> <span class="savings" id="badge-${key}">-</span></td>`
-                : `<td>${d.totalLabel}</td><td style="text-align:right;">${money(d.themRate)}</td>`}
+                ? `<td>${d.totalLabel}</td><td id="them-total-${key}">-</td><td class="us-col"><span id="us-total-${key}">-</span> <span class="savings" id="badge-${key}">-</span></td>`
+                : `<td>${d.totalLabel}</td><td style="text-align:right;">${money(d.rows.reduce((s,r)=>s+r.amount,0))}</td>`}
             </tr>
           </tbody>
         </table>
@@ -629,7 +680,7 @@ function renderPanel(key) {
     <div class="card">
       <div class="card-head"><div><h2>Quick reference</h2><p class="sub">A couple of things worth knowing at a glance.</p></div></div>
       <table class="facts">
-        ${d.facts.map(f => `<tr><td>${f.label}</td><td>${f.them}</td><td>${f.us}${f.flag ? '<span class="flag">not yet confirmed with Tony</span>' : ""}</td></tr>`).join("")}
+        ${d.facts.map(f => `<tr><td>${f.label}</td><td>${f.them}</td><td>${f.us}</td></tr>`).join("")}
       </table>
     </div>
   `;
