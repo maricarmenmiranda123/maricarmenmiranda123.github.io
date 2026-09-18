@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Competitive Analysis</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💜</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FBF7F1; --surface: #FFFFFF; --surface-2: #F6F0E6; --border: #ECE2D2;
+    --ink: #241F19; --ink-soft: #5C5245; --muted: #94897A;
+    --accent: #5B3FF0; --accent-ink: #FFFFFF; --accent-soft: #EFEAFD; --accent-border: #D9CDFB;
+    --warn: #B5741B; --warn-soft: #FBF0DE; --warn-border: #EEDBAF;
+    --shadow: 0 1px 2px rgba(36,31,25,.04), 0 8px 24px -12px rgba(36,31,25,.14);
+    --radius: 18px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #19140F; --surface: #221C15; --surface-2: #29221A; --border: #3A3124;
+      --ink: #F5EFE6; --ink-soft: #CBC0AF; --muted: #948A7A; --accent: #9C82FF;
+      --accent-ink: #16111F; --accent-soft: #2C2440; --accent-border: #4A3D74;
+      --warn: #E3B15B; --warn-soft: #362B14; --warn-border: #55461F;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 28px -14px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #19140F; --surface: #221C15; --surface-2: #29221A; --border: #3A3124;
+    --ink: #F5EFE6; --ink-soft: #CBC0AF; --muted: #948A7A; --accent: #9C82FF;
+    --accent-ink: #16111F; --accent-soft: #2C2440; --accent-border: #4A3D74;
+    --warn: #E3B15B; --warn-soft: #362B14; --warn-border: #55461F;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 28px -14px rgba(0,0,0,.6);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, .num, .totalnum, .claimline, .winline { font-family: "Quicksand", ui-sans-serif, system-ui, sans-serif; }
+
+  .wrap { max-width: 900px; margin: 0 auto; padding: 48px 24px 96px; }
+
+  h1 { font-size: clamp(28px, 4.2vw, 38px); font-weight: 700; line-height: 1.1; margin: 0; letter-spacing: -0.01em; }
+
+  nav.tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 32px 0; border-bottom: 1px solid var(--border); padding-bottom: 22px; }
+  nav.tabs button {
+    font-family: "Quicksand"; font-weight: 700; font-size: 14.5px; color: var(--ink-soft);
+    background: var(--surface); border: 1px solid var(--border); border-radius: 999px;
+    padding: 9px 18px; cursor: pointer; transition: background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  nav.tabs button:hover { border-color: var(--accent-border); color: var(--ink); }
+  nav.tabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  nav.tabs button[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+
+  .panel { display: none; }
+  .panel.active { display: block; animation: fade .2s ease; }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+  /* ---- All platforms: bento cards ---- */
+  .section-head { margin: 4px 0 18px; }
+  .section-head h2 { font-size: 16px; font-weight: 700; margin: 0 0 3px; }
+  .section-head .sub { font-size: 13.5px; color: var(--muted); margin: 0; line-height: 1.5; }
+
+  .bento { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 44px; }
+  @media (max-width: 760px) { .bento { grid-template-columns: repeat(2, 1fr); } }
+  .bcard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 16px; box-shadow: var(--shadow); }
+  .bcard.hero { background: var(--accent-soft); border: 1.5px solid var(--accent); }
+  .bcard .bname { font-family: "Quicksand"; font-weight: 700; font-size: 14px; margin-bottom: 12px; }
+  .bcard.hero .bname { color: var(--accent); }
+  .bcard .brow { display: flex; justify-content: space-between; gap: 8px; font-size: 12.5px; padding: 7px 0; border-top: 1px solid var(--border); }
+  .bcard.hero .brow { border-top-color: var(--accent-border); }
+  .bcard .brow:first-of-type { border-top: none; }
+  .bcard .brow .k { color: var(--muted); }
+  .bcard .brow .v { color: var(--ink); font-weight: 600; text-align: right; }
+  .bcard.hero .brow .v { color: var(--accent); }
+
+  /* ---- All platforms: radar ---- */
+  .radar-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px; }
+  .radar-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 24px; }
+  .radar-controls .ctrl-label { font-size: 12px; color: var(--muted); font-weight: 600; margin-right: 4px; }
+  .radar-controls button {
+    font-family: "Quicksand"; font-weight: 700; font-size: 13.5px;
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px;
+    padding: 7px 14px; cursor: pointer; color: var(--ink-soft);
+  }
+  .radar-controls button[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+
+  .radar-canvas { position: relative; max-width: 420px; margin: 0 auto; }
+  svg.radar-svg { display: block; width: 100%; height: auto; }
+  .axis-info-btn {
+    position: absolute; transform: translate(-50%, -50%);
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 1.5px solid var(--accent-border); background: var(--surface); color: var(--accent);
+    font-family: "Quicksand"; font-size: 12px; font-weight: 700; font-style: italic; line-height: 1;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+    box-shadow: var(--shadow); padding: 0;
+  }
+  .axis-info-btn:hover, .axis-info-btn[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+
+  .axis-info { margin-top: 20px; border-top: 1px solid var(--border); padding-top: 18px; }
+  .axis-info .placeholder { color: var(--muted); font-size: 13.5px; text-align: center; padding: 8px 0; }
+  .axis-info .ai-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; flex-wrap: wrap; gap: 6px; }
+  .axis-info .ai-title { font-family: "Quicksand"; font-weight: 700; font-size: 14.5px; }
+  .axis-info .ai-vs { font-size: 12.5px; color: var(--muted); }
+  .axis-info .ai-line { font-size: 14.5px; color: var(--ink-soft); line-height: 1.55; margin: 0 0 12px; }
+  .axis-info .ai-nums { display: flex; gap: 18px; flex-wrap: wrap; }
+  .axis-info .ai-num { background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 8px 14px; font-size: 13px; }
+  .axis-info .ai-num.hero { background: var(--accent-soft); border-color: var(--accent-border); }
+  .axis-info .ai-num .k { color: var(--muted); display: block; font-size: 11px; margin-bottom: 2px; }
+  .axis-info .ai-num .v { font-family: "Quicksand"; font-weight: 700; color: var(--ink); }
+  .axis-info .ai-num.hero .v { color: var(--accent); }
+
+  /* ---- Competitor panels ---- */
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; padding: 4px 0 32px; border-bottom: 1px solid var(--border); margin-bottom: 28px; }
+  @media (max-width: 620px) { .split { grid-template-columns: 1fr; gap: 22px; } }
+  .split .label { font-size: 12.5px; font-weight: 600; color: var(--muted); margin-bottom: 10px; }
+  .win { border-left: 3px solid var(--accent); padding-left: 20px; }
+  .claim { padding-left: 20px; border-left: 3px solid var(--border); }
+  @media (max-width: 620px) { .claim, .win { padding-left: 16px; } }
+  .split ul { margin: 0; padding-left: 18px; }
+  .split li { margin-bottom: 9px; line-height: 1.45; }
+  .split li:last-child { margin-bottom: 0; }
+  .claim li { color: var(--ink-soft); font-size: 15px; }
+  .win li { color: var(--ink); font-size: 15px; font-weight: 500; }
+
+  .callout { background: var(--warn-soft); border: 1px solid var(--warn-border); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 22px; }
+  .callout h3 { margin: 0 0 6px; font-size: 13px; font-weight: 700; color: var(--warn); }
+  .callout p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--ink-soft); }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 22px; }
+  .card-head { padding: 18px 22px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .card-head h2 { margin: 0; font-size: 16px; font-weight: 700; }
+  .card-head .sub { margin: 3px 0 0; font-size: 13px; color: var(--muted); }
+
+  .calc-row { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--ink-soft); white-space: nowrap; }
+  .calc-row input {
+    width: 64px; font-family: "Quicksand"; font-weight: 700; font-size: 14px; color: var(--accent);
+    border: 1px solid var(--accent-border); background: var(--accent-soft); border-radius: 8px;
+    padding: 6px 8px; text-align: center;
+  }
+  .calc-row input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+  .tablewrap { overflow-x: auto; }
+  table.compare { width: 100%; border-collapse: collapse; min-width: 420px; }
+  table.compare th, table.compare td { padding: 13px 22px; text-align: left; font-size: 14.5px; vertical-align: top; }
+  table.compare thead th { font-family: "Quicksand"; font-weight: 700; font-size: 12.5px; color: var(--muted); border-bottom: 1px solid var(--border); }
+  table.compare thead th.us-col { color: var(--accent); }
+  table.compare tbody td { border-bottom: 1px solid var(--border); color: var(--ink-soft); }
+  table.compare tbody tr:last-child td { border-bottom: none; }
+  table.compare .rowmain { color: var(--ink); font-weight: 500; }
+  table.compare .rownote { color: var(--muted); font-size: 12px; margin-top: 3px; line-height: 1.4; }
+  table.compare td.us-col { color: var(--accent); font-weight: 600; }
+  table.compare tr.total td {
+    font-family: "Quicksand"; font-weight: 700; font-size: 15px; color: var(--ink);
+    background: var(--surface-2); border-top: 1px solid var(--border); border-bottom: none;
+    padding-top: 15px; padding-bottom: 15px;
+  }
+  table.compare tr.total td.us-col { color: var(--accent); }
+
+  .savings { display: inline-block; margin-left: 10px; background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent-border); border-radius: 999px; padding: 3px 11px; font-size: 12.5px; font-weight: 700; font-family: "Quicksand"; vertical-align: middle; }
+
+  .strip { display: flex; align-items: center; justify-content: center; gap: 22px; padding: 26px 22px 6px; flex-wrap: wrap; }
+  .strip .side { text-align: center; }
+  .strip .side .who { font-size: 12.5px; color: var(--muted); font-weight: 600; margin-bottom: 6px; }
+  .strip .side .totalnum { font-size: clamp(28px, 5vw, 36px); font-weight: 700; }
+  .strip .side.us .totalnum { color: var(--accent); }
+  .strip .vs { color: var(--muted); font-size: 13px; padding-top: 20px; }
+  .unit-note { text-align: center; color: var(--muted); font-size: 12.5px; padding: 4px 22px 6px; margin: 0; }
+
+  .divider-line { border: none; border-top: 1px solid var(--border); margin: 22px 22px 18px; }
+  .leaves { padding: 0 22px 20px; }
+  .leaves h3 { margin: 0 0 12px; font-size: 13.5px; font-weight: 700; color: var(--ink-soft); }
+  .leaves ul { margin: 0; padding-left: 18px; }
+  .leaves li { margin-bottom: 10px; font-size: 14px; line-height: 1.5; color: var(--ink-soft); }
+  .leaves li:last-child { margin-bottom: 0; }
+  .leaves li b { color: var(--ink); }
+  .caveat { font-size: 12.5px; color: var(--muted); padding: 14px 22px 18px; margin: 0; border-top: 1px solid var(--border); }
+
+  table.facts { width: 100%; border-collapse: collapse; }
+  table.facts td { padding: 10px 22px; font-size: 13.5px; border-bottom: 1px solid var(--border); }
+  table.facts tr:last-child td { border-bottom: none; }
+  table.facts td:first-child { color: var(--muted); width: 34%; }
+  table.facts td:nth-child(2) { color: var(--ink-soft); }
+  table.facts td:nth-child(3) { color: var(--accent); font-weight: 600; }
+  table.facts .flag { color: var(--warn); font-size: 11px; font-style: italic; display: block; margin-top: 2px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header><h1>Competitive Analysis</h1></header>
+
+  <nav class="tabs" role="tablist" aria-label="Competitors" id="tabs"></nav>
+
+  <div id="panels"></div>
+
+</div>
+
+<script>
+/* ---------------- All platforms: bento cards ---------------- */
+const BENTO = [
+  { name: "Benable", hero: true, cost: "$50-58 / creator", managed: "Yes", guarantee: "Yes", rights: "Full*", pool: "1M+" },
+  { name: "JoinBrands", cost: "$25-69 / creator", managed: "Add-on", guarantee: "Refund only", rights: "Full", pool: "500K+" },
+  { name: "Billo", cost: "$150-250 / video", managed: "No", guarantee: "No", rights: "Full", pool: "5K" },
+  { name: "Collabstr", cost: "$271 / creator", managed: "No", guarantee: "No", rights: "Included", pool: "100K" },
+  { name: "Insense", cost: "$460 / creator", managed: "Add-on", guarantee: "No", rights: "Full", pool: "125K" },
+];
+
+function renderBento() {
+  return `<div class="bento">${BENTO.map(b => `
+    <div class="bcard ${b.hero ? "hero" : ""}">
+      <div class="bname">${b.name}</div>
+      <div class="brow"><span class="k">Cost</span><span class="v">${b.cost}</span></div>
+      <div class="brow"><span class="k">Managed</span><span class="v">${b.managed}</span></div>
+      <div class="brow"><span class="k">Guarantee</span><span class="v">${b.guarantee}</span></div>
+      <div class="brow"><span class="k">Rights</span><span class="v">${b.rights}</span></div>
+      <div class="brow"><span class="k">Pool</span><span class="v">${b.pool}</span></div>
+    </div>`).join("")}</div>
+    <p style="font-size:12px;color:var(--muted);margin:-32px 0 44px;">* not yet confirmed with Tony, see note below</p>`;
+}
+
+/* ---------------- All platforms: radar ---------------- */
+const RADAR_AXES = [
+  { key: "price", label: "Price" },
+  { key: "management", label: "Management" },
+  { key: "guarantee", label: "Guarantee" },
+  { key: "rights", label: "Rights" },
+  { key: "data", label: "Ad data" },
+  { key: "pool", label: "Pool size" },
+];
+
+const RADAR_COMPARE = {
+  price: {
+    insense: { us: "$58 / creator", them: "$460 / creator", line: "Insense runs about $460 a creator once you add their management fee, the creator payment, and commission. We do it for $58, because our creators are gifted, not paid." },
+    billo: { us: "$58 / creator", them: "$150-250 / video", line: "Billo's typical video runs $150 to $200, before their $89 editing add-on. We run about a third of that, fully managed." },
+    joinbrands: { us: "$4,999 / month", them: "$6,875 / month", line: "Fully managed, 100 creators a month costs $6,875 with them and $4,999 with us. On their self-serve side they can hit $25 a video, but that needs a 100-post commitment and is before their fee." },
+    collabstr: { us: "$58 / creator", them: "$250+ / creator", line: "Even Collabstr's cheapest creators start at $250. Ours run $58, gifted, no bidding involved." },
+  },
+  management: {
+    insense: { us: "Included", them: "$4,600/mo add-on", line: "Insense's managed tier is a $4,600 a month add-on. It's included with us from your first creator." },
+    billo: { us: "Included", them: "Not offered", line: "Billo has no true management tier. You personally review every applicant yourself, even at their top level." },
+    joinbrands: { us: "Included", them: "$4,000/mo add-on", line: "Their managed service is $4,000 a month, on top of what you pay creators. Ours is one flat, lower price." },
+    collabstr: { us: "Included", them: "Not offered", line: "There's no management option at any price on Collabstr. You source, negotiate, and chase everyone yourself." },
+  },
+  guarantee: {
+    insense: { us: "Contract + card on file", them: "Contract only", line: "Insense has contracts, but no card on file, so there's not much teeth if a creator ghosts." },
+    billo: { us: "Contract + card on file", them: "Unclear", line: "We asked Billo twice what happens when a creator misses a deadline. Both times, they dodged the question." },
+    joinbrands: { us: "Contract + card on file", them: "Refund on cancel", line: "JoinBrands refunds you if a creator cancels, which is reactive. We prevent the no-show up front with a signed contract and a card on file." },
+    collabstr: { us: "Contract + card on file", them: "None", line: "Collabstr has no posting guarantee at all. If a creator doesn't deliver, that's on you." },
+  },
+  rights: {
+    insense: { us: "Full, in perpetuity*", them: "Full, in perpetuity", line: "Both platforms include full usage rights in perpetuity. This one's a wash, pending Tony confirming our own terms." },
+    billo: { us: "Full, in perpetuity*", them: "Full, in perpetuity", line: "Same on both sides here, full rights included, nothing to differentiate on, pending Tony confirming our own terms." },
+    joinbrands: { us: "Full, in perpetuity*", them: "Full, included", line: "JoinBrands includes full rights too. No real gap on this one, pending Tony confirming our own terms." },
+    collabstr: { us: "Full, in perpetuity*", them: "Included, negotiable", line: "Collabstr includes rights but leaves room for negotiated add-ons. Ours are meant to be full, no asterisks, but that's worth double-checking." },
+  },
+  data: {
+    insense: { us: "Not yet", them: "No", line: "Neither of us has ad-performance data tied to individual creators today." },
+    billo: { us: "Not yet", them: "Yes, Meta integration", line: "This is Billo's real edge: ROAS, CTR, and hook rate per creator, benchmarked against industry medians. We don't have this yet." },
+    joinbrands: { us: "Not yet", them: "No", line: "Neither platform offers this today." },
+    collabstr: { us: "Not yet", them: "No", line: "Neither platform offers this today." },
+  },
+  pool: {
+    insense: { us: "1M+", them: "125K", line: "We're about 8 times bigger, 1M+ creators to their 125K." },
+    billo: { us: "1M+", them: "5K", line: "Billo's pool is small by design, 5K total. Ours is over 1M." },
+    joinbrands: { us: "1M+", them: "500K+", line: "They lean on scale as a selling point, but we're actually larger too, 1M+ to their 500K+." },
+    collabstr: { us: "1M+", them: "100K vetted", line: "We're about 10 times bigger, 1M+ versus their 100K vetted creators." },
+  },
+};
+
+const RADAR_SCORES = {
+  benable:    [5, 5, 5, 5, 2, 4],
+  insense:    [1, 3, 2, 5, 2, 3],
+  billo:      [3, 1, 1, 5, 5, 1],
+  joinbrands: [4, 3, 3, 5, 2, 5],
+  collabstr:  [2, 1, 1, 4, 2, 3],
+};
+const RADAR_NAMES = { insense: "Insense", billo: "Billo", joinbrands: "JoinBrands", collabstr: "Collabstr" };
+const VB = 400, RCX = 200, RCY = 200, RR = 78;
+let radarActive = "insense";
+let radarSelectedAxis = null;
+
+function radarPt(i, val) {
+  const angle = (Math.PI * 2 * i) / RADAR_AXES.length - Math.PI / 2;
+  const r = (val / 5) * RR;
+  return [RCX + r * Math.cos(angle), RCY + r * Math.sin(angle), angle];
+}
+function radarPoly(arr) { return arr.map((v, i) => { const [x,y] = radarPt(i, v); return x+","+y; }).join(" "); }
+
+function renderRadarSvg(activeKey) {
+  let rings = "";
+  for (let ring = 1; ring <= 5; ring++) {
+    rings += `<polygon points="${RADAR_AXES.map((_, i) => { const [x,y]=radarPt(i, ring); return x+","+y; }).join(" ")}" fill="none" stroke="var(--border)" stroke-width="1"/>`;
+  }
+  let spokes = "", labels = "";
+  RADAR_AXES.forEach((a, i) => {
+    const [x, y, angle] = radarPt(i, 6.0);
+    const [x0, y0] = radarPt(i, 0);
+    const [x1, y1] = radarPt(i, 5);
+    spokes += `<line x1="${x0}" y1="${y0}" x2="${x1}" y2="${y1}" stroke="var(--border)" stroke-width="1"/>`;
+    const cosA = Math.cos(angle);
+    const anchor = cosA > 0.35 ? "start" : cosA < -0.35 ? "end" : "middle";
+    const dx = anchor === "start" ? 4 : anchor === "end" ? -4 : 0;
+    labels += `<text x="${x + dx}" y="${y}" font-size="12" fill="var(--muted)" font-family="Inter" text-anchor="${anchor}" dominant-baseline="middle">${a.label}</text>`;
+  });
+  const compShape = `<polygon points="${radarPoly(RADAR_SCORES[activeKey])}" fill="none" stroke="var(--muted)" stroke-width="2" stroke-dasharray="4,3"/>`;
+  const heroShape = `<polygon points="${radarPoly(RADAR_SCORES.benable)}" fill="var(--accent)" fill-opacity="0.16" stroke="var(--accent)" stroke-width="2.5"/>`;
+  return rings + spokes + compShape + heroShape + labels;
+}
+
+function renderAxisButtons() {
+  return RADAR_AXES.map((a, i) => {
+    const [x, y] = radarPt(i, 8.1);
+    const leftPct = (x / VB) * 100, topPct = (y / VB) * 100;
+    return `<button class="axis-info-btn" style="left:${leftPct}%; top:${topPct}%;" data-axis="${a.key}" aria-pressed="false" aria-label="${a.label}, Benable versus ${RADAR_NAMES[radarActive]}"><i>i</i></button>`;
+  }).join("");
+}
+
+function renderAxisInfo() {
+  if (!radarSelectedAxis) {
+    return `<p class="placeholder">Tap an "i" on the chart to see Benable against ${RADAR_NAMES[radarActive]} on that one thing.</p>`;
+  }
+  const axis = RADAR_AXES.find(a => a.key === radarSelectedAxis);
+  const c = RADAR_COMPARE[radarSelectedAxis][radarActive];
+  return `
+    <div class="ai-head">
+      <span class="ai-title">${axis.label}</span>
+      <span class="ai-vs">Benable vs ${RADAR_NAMES[radarActive]}</span>
+    </div>
+    <p class="ai-line">${c.line}</p>
+    <div class="ai-nums">
+      <div class="ai-num hero"><span class="k">Benable</span><span class="v">${c.us}</span></div>
+      <div class="ai-num"><span class="k">${RADAR_NAMES[radarActive]}</span><span class="v">${c.them}</span></div>
+    </div>`;
+}
+
+function refreshRadar() {
+  document.getElementById("radar-svg").innerHTML = renderRadarSvg(radarActive);
+  document.getElementById("axis-info").innerHTML = renderAxisInfo();
+  document.querySelectorAll(".axis-info-btn").forEach(btn => {
+    btn.setAttribute("aria-label", btn.dataset.axis + ", Benable versus " + RADAR_NAMES[radarActive]);
+    btn.setAttribute("aria-pressed", btn.dataset.axis === radarSelectedAxis ? "true" : "false");
+  });
+}
+
+function renderAllPanel() {
+  return `
+    <div class="section-head">
+      <h2>How everyone stacks up</h2>
+      <p class="sub">One glance before you dive into a specific competitor.</p>
+    </div>
+    ${renderBento()}
+    <div class="radar-card">
+      <div class="section-head">
+        <h2>The same six things, one shape</h2>
+        <p class="sub">How to read it: the bigger the filled purple shape, the better we do on that measure. Pick a competitor below to lay their dashed outline over ours, then tap an "i" on the chart for the real numbers behind any point.</p>
+      </div>
+      <div class="radar-controls">
+        <span class="ctrl-label">Compare against</span>
+        <div id="radar-controls"></div>
+      </div>
+      <div class="radar-canvas">
+        <svg viewBox="0 0 400 400" class="radar-svg" id="radar-svg"></svg>
+        ${renderAxisButtons()}
+      </div>
+      <div class="axis-info" id="axis-info"></div>
+    </div>
+  `;
+}
+
+function initRadarControls() {
+  const controls = document.getElementById("radar-controls");
+  Object.keys(RADAR_NAMES).forEach(key => {
+    const btn = document.createElement("button");
+    btn.textContent = RADAR_NAMES[key];
+    btn.setAttribute("aria-pressed", key === radarActive ? "true" : "false");
+    btn.addEventListener("click", () => {
+      radarActive = key;
+      Array.from(controls.children).forEach(b => b.setAttribute("aria-pressed", "false"));
+      btn.setAttribute("aria-pressed", "true");
+      refreshRadar();
+    });
+    controls.appendChild(btn);
+  });
+  document.querySelectorAll(".axis-info-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      radarSelectedAxis = radarSelectedAxis === btn.dataset.axis ? null : btn.dataset.axis;
+      refreshRadar();
+    });
+  });
+  refreshRadar();
+}
+
+/* ---------------- Competitor panels ---------------- */
+const DATA = {
+  insense: {
+    name: "Insense",
+    claimList: [
+      "We're the most vetted network out there: 125K creators, first-party Instagram and TikTok data.",
+      "You get a team that already knows these creators, not a cold list.",
+    ],
+    winList: [
+      "Their managed tier works out to about $460 per creator once you add it all up.",
+      "We do the same job for $58, because our creators are gifted, not paid.",
+    ],
+    mode: "perUnit",
+    unit: "creators",
+    defaultN: 20,
+    themRate: 460,
+    usRate: 58,
+    unitLabel: "per creator, fully managed",
+    rows: [
+      { label: "Managing the program", amount: 230, note: "$4,600 for 20 creators, their quoted volume" },
+      { label: "Creator payment", amount: 200, note: "their stated typical rate, $200 to $250" },
+      { label: "Platform commission, 15%", amount: 30 },
+    ],
+    totalLabel: "Total per creator",
+    caveat: "Their quote is for 20 creators a month. Ours is scaled from a 50-creator program.",
+    leavesOut: [
+      "Their dashboard shows who's about to miss a deadline, but nothing chases them for you. That follow-up is still on your team.",
+      "The managed tier starts with an onboarding call to size the brief. Day-to-day sourcing still comes back to you unless you're on the dedicated add-on.",
+    ],
+    facts: [
+      { label: "Usage rights", them: "Full rights, in perpetuity", us: "Full rights, in perpetuity", flag: true },
+      { label: "Known gap", them: "No affiliate or sales tracking", us: "No Meta ad-performance layer yet" },
+    ],
+  },
+  billo: {
+    name: "Billo",
+    claimList: [
+      "Our Meta performance data shows ROAS, CTR, and hook rate for every creator.",
+      "Our AI script tool tells you why each hook works, not just what to say.",
+    ],
+    winList: [
+      "That's real, and worth acknowledging. But their own working average is $150 to $200 a video before the $89 editing add-on.",
+      "You still personally review every applicant yourself, even at their top tier. We run about a third of their price, fully managed.",
+    ],
+    mode: "perUnit",
+    unit: "videos",
+    defaultN: 50,
+    themRate: 175,
+    usRate: 58,
+    unitLabel: "per video, per creator",
+    rows: [
+      { label: "Base video", amount: 99 },
+      { label: "Premium creator add-on", amount: 50 },
+      { label: "Longer video, extras (up to)", amount: 101 },
+    ],
+    totalLabel: "Typical total, per video",
+    caveat: "They charge per video, we charge per creator. One creator makes one video in both models, so the comparison holds. $175 is the midpoint of their $150-250 typical range.",
+    leavesOut: [
+      "Even at their top tier ($5,000+ wallet), you still review all ~50 applicants a campaign gets and pick the 5 you want. Their success manager is a perk, not a replacement for that work.",
+      "Editing ($89), organic posting, and partnership ads are all separate line items on top of the base video price.",
+    ],
+    facts: [
+      { label: "Usage rights", them: "Full rights, in perpetuity", us: "Full rights, in perpetuity", flag: true },
+      { label: "Known gap", them: "No clear late-deadline policy (asked twice, dodged)", us: "No Meta ad-performance layer yet" },
+    ],
+  },
+  joinbrands: {
+    name: "JoinBrands",
+    claimList: [
+      "We connect you to half a million creators, more supply than anyone else in this list.",
+      "Videos can run as low as $25, if you commit to 100 posts upfront.",
+    ],
+    winList: [
+      "That $25 is real, but pay-as-you-go is $50 minimum, and their 15% fee brings it to $28.75. That's self-serve, before your own time, and before what the rights are worth.",
+      "Fully managed, 100 creators a month costs $6,875 with them. Ours is $4,999 for the same thing.",
+    ],
+    mode: "program",
+    unit: "creators",
+    defaultN: 100,
+    unitLabel: "fully managed, 100 creators a month",
+    totalLabel: "Total per month",
+    caveat: "$4,999 is our Preferred Partner rate. Check current pricing before quoting it.",
+    leavesOut: [
+      "<b>Finding the creators:</b> you review about 5 profiles to find 1 that meets your bar, roughly 500 profiles a month to fill 100 spots.",
+      "<b>Chasing late posts:</b> about 30% of their creators miss the deadline. That's around 30 creators you're checking in on and eventually escalating to support at any given time.",
+    ],
+    facts: [
+      { label: "Usage rights", them: "Full rights included", us: "Full rights in perpetuity", flag: true },
+      { label: "Reimbursement fraud risk", them: "Real, drives 95% of brands to reimbursement-only", us: "None, gifting has no upfront creator payment" },
+    ],
+  },
+  collabstr: {
+    name: "Collabstr",
+    claimList: [
+      "Our bidding marketplace can land good pricing on higher-end UGC.",
+      "You negotiate directly with creators yourself, full control over who and how much.",
+    ],
+    winList: [
+      "There's no managed tier at any price. Even their cheapest creators run $250.",
+      "That's more than four times what we charge per creator, and you're doing all the sourcing and chasing solo.",
+    ],
+    mode: "perUnit",
+    unit: "creators",
+    defaultN: 50,
+    themRate: 271,
+    usRate: 58,
+    unitLabel: "per creator, all in",
+    rows: [
+      { label: "Subscription (amortized, 50/mo)", amount: 8 },
+      { label: "Creator rate (their stated floor)", amount: 250 },
+      { label: "Transaction fee, 5%", amount: 13 },
+    ],
+    totalLabel: "Minimum total, per creator",
+    caveat: "This uses their cheapest listed rate. Most campaigns cost more than this.",
+    leavesOut: [
+      "There's no management tier to buy at any price. You personally review 20 to 50 bids per job, negotiate each one, and chase every delivery yourself.",
+      "Their own team told us most churn is silent: brands quietly testing the channel and disappearing without ever saying what didn't work, so problems never get surfaced or fixed.",
+    ],
+    facts: [
+      { label: "Usage rights", them: "Included, negotiable add-ons possible", us: "Full rights in perpetuity", flag: true },
+      { label: "Known gap", them: "No Meta ad integration (on their roadmap)", us: "Smaller pool for celebrity-tier talent" },
+    ],
+  },
+};
+
+const order = ["all", "insense", "billo", "joinbrands", "collabstr"];
+const labels = { all: "All platforms" };
+const tabsEl = document.getElementById("tabs");
+const panelsEl = document.getElementById("panels");
+const money = n => "$" + Math.round(n).toLocaleString();
+
+function joinbrandsThem(N) { return 4000 + (N * 25 * 1.15); }
+function joinbrandsUs(N) { return N * 49.99; }
+
+function updateStrip(key) {
+  const d = DATA[key];
+  const input = document.getElementById("n-" + key);
+  const N = Math.max(1, parseInt(input.value, 10) || d.defaultN);
+  let them, us;
+  if (d.mode === "program") {
+    them = joinbrandsThem(N); us = joinbrandsUs(N);
+    document.getElementById("row-videos-" + key).textContent = money(N * 25);
+    document.getElementById("row-fee-" + key).textContent = money(N * 25 * 0.15);
+  } else {
+    them = d.themRate * N; us = d.usRate * N;
+  }
+  const pct = Math.round((1 - us / them) * 100);
+  document.getElementById("them-total-" + key).textContent = money(them);
+  document.getElementById("us-total-" + key).textContent = money(us);
+  document.getElementById("badge-" + key).textContent = pct + "% less";
+}
+
+function renderItemRows(d) {
+  if (d.mode === "program") {
+    return `
+      <tr><td><div class="rowmain">Managing the program</div></td><td>$4,000</td><td class="us-col">Included</td></tr>
+      <tr><td><div class="rowmain">Creator videos, ${d.defaultN} x $25 (their minimum)</div></td><td id="row-videos-${d.key}">$2,500</td><td class="us-col">Included</td></tr>
+      <tr><td><div class="rowmain">Platform fee, 15%</div></td><td id="row-fee-${d.key}">$375</td><td class="us-col">Included</td></tr>
+    `;
+  }
+  return d.rows.map(r => `
+    <tr>
+      <td><div class="rowmain">${r.label}</div>${r.note ? `<div class="rownote">${r.note}</div>` : ""}</td>
+      <td style="text-align:right;">${money(r.amount)}</td>
+    </tr>`).join("");
+}
+
+function renderPanel(key) {
+  const d = DATA[key]; d.key = key;
+  const isProgram = d.mode === "program";
+  return `
+    <div class="split">
+      <div class="claim">
+        <div class="label">${d.name} pitch</div>
+        <ul>${d.claimList.map(x => `<li>${x}</li>`).join("")}</ul>
+      </div>
+      <div class="win">
+        <div class="label">Why we win</div>
+        <ul>${d.winList.map(x => `<li>${x}</li>`).join("")}</ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h2>${isProgram ? "Fully managed, side by side" : "What it actually costs, side by side"}</h2>
+        </div>
+        <div class="calc-row">
+          for <input type="number" min="1" id="n-${key}" value="${d.defaultN}"> ${d.unit} a month
+        </div>
+      </div>
+      <div class="tablewrap">
+        <table class="compare">
+          <thead><tr>
+            ${isProgram
+              ? `<th></th><th>${d.name}</th><th class="us-col">Benable</th>`
+              : `<th></th><th style="text-align:right;">Amount</th>`}
+          </tr></thead>
+          <tbody>
+            ${renderItemRows(d)}
+            <tr class="total">
+              ${isProgram
+                ? `<td>${d.totalLabel}</td><td id="them-total-${key}">-</td><td class="us-col">Included <span id="us-total-${key}">-</span> <span class="savings" id="badge-${key}">-</span></td>`
+                : `<td>${d.totalLabel}</td><td style="text-align:right;">${money(d.themRate)}</td>`}
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      ${!isProgram ? `
+      <div class="strip">
+        <div class="side them">
+          <div class="who">${d.name}</div>
+          <div class="totalnum" id="them-total-${key}">-</div>
+        </div>
+        <div class="vs">vs</div>
+        <div class="side us">
+          <div class="who">Benable</div>
+          <div class="totalnum" id="us-total-${key}">-</div>
+        </div>
+        <span class="savings" id="badge-${key}">-</span>
+      </div>` : ""}
+      <p class="unit-note">${d.unitLabel}</p>
+      <hr class="divider-line">
+      <div class="leaves">
+        <h3>What that price doesn't include</h3>
+        <ul>${d.leavesOut.map(x => `<li>${x}</li>`).join("")}</ul>
+      </div>
+      <p class="caveat">${d.caveat}</p>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><div><h2>Quick reference</h2><p class="sub">A couple of things worth knowing at a glance.</p></div></div>
+      <table class="facts">
+        ${d.facts.map(f => `<tr><td>${f.label}</td><td>${f.them}</td><td>${f.us}${f.flag ? '<span class="flag">not yet confirmed with Tony</span>' : ""}</td></tr>`).join("")}
+      </table>
+    </div>
+  `;
+}
+
+function init() {
+  order.forEach((key, i) => {
+    const btn = document.createElement("button");
+    btn.textContent = key === "all" ? labels.all : DATA[key].name;
+    btn.setAttribute("role", "tab");
+    btn.setAttribute("aria-selected", i === 0 ? "true" : "false");
+    btn.dataset.key = key;
+    btn.addEventListener("click", () => selectTab(key));
+    tabsEl.appendChild(btn);
+
+    const panel = document.createElement("div");
+    panel.className = "panel" + (i === 0 ? " active" : "");
+    panel.id = "panel-" + key;
+    panel.setAttribute("role", "tabpanel");
+
+    if (key === "all") {
+      panel.innerHTML = renderAllPanel();
+      panelsEl.appendChild(panel);
+      initRadarControls();
+    } else {
+      panel.innerHTML = renderPanel(key);
+      panelsEl.appendChild(panel);
+      document.getElementById("n-" + key).addEventListener("input", () => updateStrip(key));
+      updateStrip(key);
+    }
+  });
+}
+
+function selectTab(key) {
+  order.forEach(k => document.getElementById("panel-" + k).classList.toggle("active", k === key));
+  Array.from(tabsEl.children).forEach(btn => btn.setAttribute("aria-selected", btn.dataset.key === key ? "true" : "false"));
+}
+
+init();
+</script>
+</body>
+</html>
