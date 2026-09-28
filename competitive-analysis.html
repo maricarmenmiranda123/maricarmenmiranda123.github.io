@@ -194,12 +194,271 @@
   table.facts td:first-child { color: var(--muted); width: 34%; }
   table.facts td:nth-child(2) { color: var(--ink-soft); }
   table.facts td:nth-child(3) { color: var(--accent); font-weight: 600; }
+
+  header.top { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:14px 20px; }
+  .views { display:inline-flex; border:1px solid var(--border); border-radius:999px; background:var(--surface); padding:3px; }
+  .views .view { font-family:"Quicksand"; font-weight:700; font-size:13.5px; padding:7px 14px; border-radius:999px; color:var(--ink-soft); text-decoration:none; }
+  .views .view.on { background:var(--accent); color:var(--accent-ink); }
+  .views a.view:hover { color:var(--ink); }
+  .views a.view:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+
+  /* ---- price vs effort chart ---- */
+  .pe-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px; margin-bottom: 44px; }
+  .pe-toggle { display:inline-flex; align-items:center; gap:8px; font-size:13.5px; color:var(--ink-soft); cursor:pointer; margin: 4px 0 18px; }
+  .pe-toggle input { width:16px; height:16px; accent-color: var(--accent); margin:0; }
+  .pe-group { margin-top: 18px; }
+  .pe-group:first-of-type { margin-top: 0; }
+  .pe-ghead { display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 10px; margin-bottom: 8px; }
+  .pe-ghead b { font-family:"Quicksand"; font-size:14px; }
+  .pe-ghead span { font-size:12.5px; color:var(--muted); }
+  .pe-row { display:grid; grid-template-columns: 170px minmax(0,1fr) 84px 104px; gap: 12px; align-items:center; padding: 6px 0; border-top:1px solid var(--border); }
+  .pe-row .nm { font-size:13.5px; font-weight:600; color:var(--ink); line-height:1.25; }
+  .pe-row .nm small { display:block; font-weight:400; font-size:11.5px; color:var(--muted); margin-top:2px; }
+  .pe-row .vl { text-align:right; font-family:"Quicksand"; font-weight:700; font-size:14px; color:var(--ink); font-variant-numeric: tabular-nums; }
+  .pe-row .vl small { display:block; font-family:Inter; font-weight:400; font-size:11.5px; color:var(--muted); }
+  .pe-row.us .nm, .pe-row.us .vl { color: var(--accent); }
+  .pe-row .vl.cash { font-family: Inter; font-weight: 500; color: var(--muted); }
+  .pe-row.pe-colhead { border-top: none; padding: 0 0 4px; }
+  .pe-row.pe-colhead .vl { font-family: Inter; font-size: 11.5px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  .pe-track { position:relative; height: 22px; }
+  .pe-track .grid { position:absolute; top:0; bottom:0; width:1px; background: var(--border); }
+  .pe-track .rng { position:absolute; top:9px; height:4px; border-radius:4px; background: var(--muted); opacity:.55; }
+  .pe-track .dot { position:absolute; top:5px; width:12px; height:12px; border-radius:50%; background: var(--ink-soft); border:2px solid var(--surface); transform: translateX(-50%); transition: left .25s ease; }
+  .pe-track .rng { transition: left .25s ease, width .25s ease; }
+  .pe-row.us .dot { background: var(--accent); width:14px; height:14px; top:4px; }
+  .pe-row.us .rng { background: var(--accent); opacity:.45; }
+  .pe-axis { display:grid; grid-template-columns: 170px minmax(0,1fr) 84px 104px; gap:12px; margin-top: 4px; }
+  .pe-axis .ticks { position:relative; height: 18px; font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .pe-axis .ticks span { position:absolute; transform: translateX(-50%); white-space:nowrap; }
+  .pe-note { font-size: 12.5px; color: var(--muted); margin: 16px 0 0; line-height: 1.55; }
+  @media (max-width: 620px) {
+    .pe-row { grid-template-columns: minmax(0,1fr) 76px 84px; gap: 8px; }
+    .pe-track, .pe-axis, .pe-row.pe-colhead > div:nth-child(2) { display: none; }
+    .pe-row .vl { font-size: 12.5px; }
+    .pe-axis .ticks span:nth-child(even) { display:none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .pe-track .dot, .pe-track .rng { transition:none; } }
+
+  /* ---- where they're good ---- */
+  .good { margin: -8px 0 28px; padding: 14px 18px; border-radius: 14px; background: var(--surface-2); border:1px solid var(--border); }
+  .good .label { font-size: 12.5px; font-weight: 600; color: var(--muted); margin-bottom: 8px; }
+  .good ul { margin:0; padding-left:18px; }
+  .good li { font-size: 14.5px; color: var(--ink-soft); line-height:1.45; margin-bottom:6px; }
+  .good li:last-child { margin-bottom:0; }
+
+  .topbar { max-width: 900px; margin: 0 auto; padding: 48px 24px 0; }
+  .topbar.wide { max-width: 1120px; }
+  #salesview .wrap { padding-top: 8px; }
+  .views button.view { border:0; background:transparent; cursor:pointer; }
+  .views button.view:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+  @media (max-width:640px){ .topbar { padding: 28px 16px 0; } }
+  #teamview .page { padding-top: 24px; }
+  #teamview .teamtitle { font-family:"Quicksand",ui-sans-serif,system-ui,sans-serif; font-weight:700; font-size:30px; line-height:1.15; margin:0; }
+/* ===== team research view (scoped) ===== */
+#teamview{
+  --bg:#FBF7F1; --surface:#FFFFFF; --deep:#F6F0E6; --border:#ECE2D2; --border-strong:#D8CBB6;
+  --text:#241F19; --text-2:#5C5245; --muted:#857A6B;
+  --teal:#5B3FF0; --teal-tint:#EFEAFD;
+  --good:#1E6B3A; --good-tint:#E9F3EC; --warn:#8A5A0B; --warn-tint:#FBF1DC;
+  --dot:#3D352C; --tier:#94897A;
+  --q-a:#F6F0E6; --q-b:#F2EEFD;
+  --font:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --display:"Quicksand",ui-sans-serif,system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) #teamview{
+    color-scheme:dark;
+    --bg:#19140F; --surface:#221C15; --deep:#29221A; --border:#3A3124; --border-strong:#4E4334;
+    --text:#F5EFE6; --text-2:#CBC0AF; --muted:#A0968A;
+    --teal:#9C82FF; --teal-tint:#2C2440;
+    --good:#7CC795; --good-tint:#1C2B21; --warn:#E0B266; --warn-tint:#2E2615;
+    --dot:#E6DED2; --tier:#948A7A;
+    --q-a:#201A14; --q-b:#241E30;
+  }
+
+}
+:root[data-theme="dark"] #teamview{
+  color-scheme:dark;
+  --bg:#19140F; --surface:#221C15; --deep:#29221A; --border:#3A3124; --border-strong:#4E4334;
+  --text:#F5EFE6; --text-2:#CBC0AF; --muted:#A0968A;
+  --teal:#9C82FF; --teal-tint:#2C2440;
+  --good:#7CC795; --good-tint:#1C2B21; --warn:#E0B266; --warn-tint:#2E2615;
+  --dot:#E6DED2; --tier:#948A7A;
+  --q-a:#201A14; --q-b:#241E30;
+}
+#teamview *{box-sizing:border-box}
+#teamview{background:var(--bg);color:var(--text);font-family:var(--font);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+#teamview .page{max-width:1120px;margin:0 auto;padding-inline:24px;padding-block:40px 64px}
+@media (max-width:640px){#teamview .page{padding-inline:16px;padding-block:28px 48px}
+}
+#teamview .teamtitle{font-family:var(--display);font-weight:700;font-size:30px;line-height:1.1;letter-spacing:-.02em;margin:0;text-wrap:balance}
+#teamview h2.sec{font-family:var(--display);font-weight:700;font-size:28px;line-height:1.15;margin:0;text-wrap:balance}
+#teamview .dek{margin:12px 0 0;max-width:62ch;color:var(--text-2);font-size:17px}
+#teamview .eyebrow{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+#teamview .head .eyebrow{margin-bottom:10px}
+#teamview .lede{margin:6px 0 0;color:var(--muted);max-width:64ch}
+#teamview section.block{margin-top:56px}
+#teamview .howto{margin:18px 0 0;max-width:78ch;font-size:14px;color:var(--text-2);background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 16px}
+#teamview .howto strong{color:var(--text)}
+#teamview .controls{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;margin-top:24px;font-size:13px;color:var(--muted)}
+#teamview .legend{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center}
+#teamview .legend span{display:inline-flex;align-items:center;gap:6px}
+#teamview .sw{width:12px;height:12px;border-radius:50%;display:inline-block;flex:none}
+#teamview .sw.inc{background:var(--dot)}
+#teamview .sw.ext{border:2.5px solid var(--dot);background:transparent}
+#teamview .sw.var{border:2px dashed var(--dot);background:transparent}
+#teamview .sw.ben{background:var(--teal);width:14px;height:14px}
+#teamview .sw.tier{width:9px;height:9px;background:var(--tier)}
+#teamview .toggle{display:inline-flex;align-items:center;gap:8px;cursor:pointer;color:var(--text-2)}
+#teamview .toggle input{width:16px;height:16px;accent-color:var(--teal);margin:0}
+#teamview .layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:28px;margin-top:20px;align-items:start}
+@media (max-width:900px){#teamview .layout{grid-template-columns:1fr}
+}
+#teamview .chart{display:grid;grid-template-columns:28px minmax(0,1fr);grid-template-rows:auto auto;gap:8px}
+#teamview .ylab{grid-row:1;writing-mode:vertical-rl;transform:rotate(180deg);display:flex;justify-content:space-between;font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--muted);text-transform:uppercase;white-space:nowrap}
+#teamview .xlab{grid-column:2;display:flex;justify-content:space-between;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+#teamview .plot{position:relative;aspect-ratio:5/4;max-width:100%;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+#teamview .quad{position:absolute;width:50%;height:50%}
+#teamview .quad.tl{left:0;top:0;background:var(--q-a)}
+#teamview .quad.tr{right:0;top:0;background:var(--q-b)}
+#teamview .quad.bl{left:0;bottom:0;background:var(--surface)}
+#teamview .quad.br{right:0;bottom:0;background:var(--q-a)}
+#teamview .qname{position:absolute;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);opacity:.85}
+#teamview .quad.tl .qname{left:12px;top:10px}
+#teamview .quad.tr .qname{right:12px;top:10px}
+#teamview .quad.bl .qname{left:12px;bottom:10px}
+#teamview .quad.br .qname{right:12px;bottom:10px}
+#teamview .plot svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#teamview .plot svg line{stroke:var(--tier);stroke-width:1.25;stroke-dasharray:4 4}
+#teamview .pt{position:absolute;transform:translate(-50%,50%);display:flex;align-items:center;background:none;border:0;padding:0;cursor:pointer;color:var(--text);font:inherit}
+#teamview .pt .d{width:14px;height:14px;border-radius:50%;flex:none;background:var(--dot);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:var(--surface);transition:transform .12s}
+#teamview .pt.ext .d{background:var(--surface);border:2.5px solid var(--dot);color:var(--dot)}
+#teamview .pt.var .d{background:var(--surface);border:2px dashed var(--dot);color:var(--dot)}
+#teamview .pt.tier .d{width:10px;height:10px;background:var(--tier);border:0}
+#teamview .pt.ben .d{width:18px;height:18px;background:var(--teal);border:0;box-shadow:0 0 0 4px var(--teal-tint)}
+#teamview .pt .l{position:absolute;left:100%;margin-left:7px;font-size:13px;font-weight:500;white-space:nowrap;color:var(--text-2)}
+#teamview .pt.left .l{left:auto;right:100%;margin-left:0;margin-right:7px}
+#teamview .pt.ben .l{color:var(--teal);font-weight:600;font-size:14px}
+#teamview .pt.tier .l{color:var(--muted);font-weight:400;font-style:italic}
+#teamview .pt:hover .d,#teamview .pt[aria-pressed="true"] .d{transform:scale(1.3)}
+#teamview .pt[aria-pressed="true"] .l{color:var(--text);font-weight:600}
+#teamview .pt:focus-visible{outline:none}
+#teamview .pt:focus-visible .d{outline:2px solid var(--teal);outline-offset:3px}
+#teamview .plot.no-tiers .pt.tier,#teamview .plot.no-tiers svg{display:none}
+@media (max-width:640px){#teamview .pt .l{display:none}
+#teamview .pt .d{width:20px;height:20px}
+#teamview .pt.tier .d{width:16px;height:16px;font-size:9px;color:var(--surface)}
+#teamview .pt.ben .d{width:22px;height:22px;color:#fff}
+#teamview .qname{font-size:9px}
+#teamview .quad.tl .qname,#teamview .quad.bl .qname{left:8px}
+#teamview .quad.tr .qname,#teamview .quad.br .qname{right:8px}
+
+}
+@media (min-width:641px){#teamview .pt .d .n{display:none}
+}
+#teamview .gpanel{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px)}
+@media (max-width:900px){#teamview .gpanel{position:static}
+}
+#teamview .gpanel h3{font-family:var(--display);font-weight:700;font-size:26px;margin:4px 0 0;line-height:1.15}
+#teamview .kind{font-size:13px;color:var(--muted);margin-top:4px}
+#teamview .gpanel p{margin:14px 0 0;color:var(--text-2)}
+#teamview .facts{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:16px 0 0;font-size:14px}
+#teamview .facts dt{color:var(--muted)}
+#teamview .facts dd{margin:0;font-variant-numeric:tabular-nums}
+#teamview .chip{display:inline-block;font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--deep);color:var(--text-2)}
+#teamview .chip.ben{background:var(--teal-tint);color:var(--teal)}
+#teamview .btn{display:inline-flex;align-items:center;gap:6px;margin-top:18px;padding:8px 14px;border-radius:8px;border:1px solid var(--border-strong);background:var(--surface);color:var(--text);font:inherit;font-size:14px;font-weight:500;cursor:pointer}
+#teamview .btn:hover{border-color:var(--teal);color:var(--teal)}
+#teamview .btn:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+#teamview .scrim{position:fixed;inset:0;background:rgba(20,20,18,.45);z-index:50}
+#teamview .drawer{position:fixed;top:0;right:0;bottom:0;width:min(760px,100%);background:var(--bg);z-index:60;overflow-y:auto;box-shadow:-12px 0 40px rgba(0,0,0,.18);padding:0 24px calc(32px + env(safe-area-inset-bottom,0px))}
+@media (max-width:640px){#teamview .drawer{padding-inline:16px}
+}
+#teamview .dbar{position:sticky;top:0;display:flex;justify-content:flex-end;padding:calc(12px + env(safe-area-inset-top,0px)) 0 12px;background:var(--bg);z-index:1}
+#teamview .dbar .btn{margin-top:0}
+#teamview .drawer .profile{margin-top:0}
+body.locked{overflow:hidden}
+#teamview .pubtag{font-style:normal;font-size:10.5px;font-weight:600;letter-spacing:.02em;margin-left:6px;padding:1px 6px;border-radius:999px;border:1px dashed var(--border-strong);color:var(--muted);background:var(--surface);vertical-align:1px}
+#teamview .legend .pubtag{margin-left:0}
+#teamview .srcs{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+#teamview .stag{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--deep);color:var(--text-2)}
+#teamview .stag.full{background:var(--teal);color:#fff}
+#teamview .stag.none{background:transparent;border:1px dashed var(--border-strong);color:var(--muted)}
+#teamview .profile{margin-top:18px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px}
+@media (max-width:640px){#teamview .profile{padding:20px}
+}
+#teamview .phead{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:baseline;justify-content:space-between}
+#teamview .phead h3{font-family:var(--display);font-weight:700;font-size:32px;margin:0;line-height:1.1}
+#teamview .depth{font-size:13px;color:var(--muted)}
+#teamview .depth strong{color:var(--text-2);font-weight:600}
+#teamview .who{margin:10px 0 0;color:var(--text-2);max-width:70ch;font-size:16px}
+#teamview .pgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 36px;margin-top:24px}
+@media (max-width:760px){#teamview .pgrid{grid-template-columns:1fr}
+}
+#teamview .pgrid h4{margin:0 0 8px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+#teamview ul.b{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+#teamview ul.b li{position:relative;padding-left:16px;font-size:14px;color:var(--text-2)}
+#teamview ul.b li::before{content:"";position:absolute;left:0;top:.62em;width:6px;height:6px;border-radius:50%;background:var(--border-strong)}
+#teamview .vs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:28px}
+@media (max-width:760px){#teamview .vs{grid-template-columns:1fr}
+}
+#teamview .vs > div{border-radius:10px;padding:16px 18px}
+#teamview .vs .w{background:var(--good-tint)}
+#teamview .vs .x{background:var(--warn-tint)}
+#teamview .vs h4{margin:0 0 8px;font-size:13px;font-weight:600}
+#teamview .vs .w h4{color:var(--good)}
+#teamview .vs .x h4{color:var(--warn)}
+#teamview .vs ul.b li::before{background:currentColor;opacity:.4}
+#teamview .openq{margin-top:20px;font-size:14px;color:var(--muted)}
+#teamview .openq strong{color:var(--text-2)}
+#teamview .jump-unused{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+#teamview .jump button{font:inherit;font-size:13px;padding:4px 10px;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--text-2);cursor:pointer}
+#teamview .jump button[aria-current="true"]{background:var(--text);color:var(--surface);border-color:var(--text)}
+#teamview .jump button.b1{color:var(--teal);border-color:var(--teal)}
+#teamview .jump button.b1[aria-current="true"]{background:var(--teal);color:var(--surface)}
+#teamview .jump button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+#teamview .tk{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:20px}
+@media (max-width:760px){#teamview .tk{grid-template-columns:1fr}
+}
+#teamview .tk div{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px}
+#teamview .tk h4{margin:0 0 6px;font-size:15px;font-weight:600}
+#teamview .tk p{margin:0;font-size:14px;color:var(--text-2)}
+#teamview .qgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:20px}
+@media (max-width:640px){#teamview .qgrid{grid-template-columns:1fr}
+}
+#teamview .qcard{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px}
+#teamview .qcard h4{margin:0;font-size:15px;font-weight:600}
+#teamview .qcard .ax{font-size:12px;color:var(--muted);margin-top:2px}
+#teamview .qcard ul{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:6px}
+#teamview .qcard li button{all:unset;cursor:pointer;display:flex;gap:10px;align-items:baseline;font-size:14px;color:var(--text-2)}
+#teamview .qcard li button:focus-visible{outline:2px solid var(--teal);outline-offset:2px;border-radius:4px}
+#teamview .qcard li button:hover strong{text-decoration:underline;text-underline-offset:3px}
+#teamview .qcard li .num{font-size:12px;color:var(--muted);min-width:18px;font-variant-numeric:tabular-nums}
+#teamview .qcard li .sub{color:var(--muted);font-size:13px}
+#teamview .qcard li.is-ben strong{color:var(--teal)}
+#teamview .gaps{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+#teamview .gaps span{font-size:13px;padding:4px 10px;border-radius:999px;border:1px dashed var(--border-strong);color:var(--text-2)}
+#teamview .notes{margin-top:48px;border-top:1px solid var(--border);padding-top:20px;display:grid;gap:8px;max-width:72ch;color:var(--text-2);font-size:14px}
+#teamview .notes p{margin:0}
+@media (prefers-reduced-motion:reduce){#teamview .pt .d{transition:none}
+}
+
+
 </style>
 </head>
 <body>
+<div class="topbar" id="topbar">
+  <header class="top">
+    <h1>Competitive Analysis</h1>
+    <div class="views" role="tablist" aria-label="View">
+      <button type="button" class="view on" role="tab" aria-selected="true" data-view="sales">Sales view</button>
+      <button type="button" class="view" role="tab" aria-selected="false" data-view="team">Team research view</button>
+    </div>
+  </header>
+</div>
+<div id="salesview">
 <div class="wrap">
 
-  <header><h1>Competitive Analysis</h1></header>
+
 
   <nav class="tabs" role="tablist" aria-label="Competitors" id="tabs"></nav>
 
@@ -207,16 +466,82 @@
 
 </div>
 
+</div>
+<div id="teamview" hidden>
+<div class="page">
+  <header class="head">
+    <div class="eyebrow">Benable competitive research</div>
+    <h2 class="teamtitle">Buy content or buy audience</h2>
+  </header>
+
+  <p class="howto"><strong>How to read it:</strong> up means the brand pays for posts on the creator's own account, down means it buys video files it runs itself. Right means someone else runs the program, left means the brand does the work. Click a dot for details. Placements are our judgment. Each summary shows where the information comes from.</p>
+
+  <div class="controls">
+    <div class="legend" aria-label="Legend">
+      <span><i class="sw inc"></i>Rights included</span>
+      <span><i class="sw ext"></i>Rights cost extra</span>
+      <span><i class="sw var"></i>Rights vary or unknown</span>
+      <span><i class="sw ben"></i>Benable</span>
+      <span><i class="sw tier"></i>Managed tier of a self-serve platform</span>
+    </div>
+    <label class="toggle"><input type="checkbox" id="show-tiers" checked> Show managed tiers</label>
+  </div>
+
+  <div class="layout">
+    <div class="chart">
+      <div class="ylab"><span>$ Buying content (UGC with rights)</span><span>$$$ Buying audience</span></div>
+      <div class="plot" id="plot">
+        <div class="quad tl"><span class="qname">DIY reach</span></div>
+        <div class="quad tr"><span class="qname">Done-for-you reach</span></div>
+        <div class="quad bl"><span class="qname">DIY content</span></div>
+        <div class="quad br"><span class="qname">Done-for-you content</span></div>
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none" id="links" aria-hidden="true"></svg>
+      </div>
+      <div class="xlab"><span>Self-managed</span><span>Full-managed</span></div>
+    </div>
+    <aside class="gpanel" id="gpanel" aria-live="polite"></aside>
+  </div>
+
+  <section class="block" id="takeaways">
+    <div class="eyebrow">Across the set</div>
+    <h2 class="sec">What the whole grid says</h2>
+    <div class="tk">
+      <div><h4>Benable's corner is small and expensive to enter</h4><p>Done-for-you reach has few players, and each has a catch: Statusphere starts at $10,000, Stack Influence won't let you pick creators and needs 50 to 100 at a time, Hummingbirds only takes CPG brands in national retail, and minisocial is about $300 a creator.</p></div>
+      <div><h4>Managed is often a tier, not a company</h4><p>JoinBrands managed is $4,000/mo, Insense $4,600/mo for 20 creators, Social Cat $250 per collaboration, HFC from $150K, and Billo and TRIBE offer one without public prices. Self-serve tools are moving right on the grid by adding a service layer.</p></div>
+      <div><h4>Rights are the most common "but they include"</h4><p>Most platforms bundle perpetual or paid-use rights by default (JoinBrands, Insense, Billo, Trend, Social Cat, HFC, Hummingbirds, minisocial). Benable and TRIBE charge extra for them, and Collabstr sets them per campaign.</p></div>
+      <div><h4>Guarantees come in different shapes</h4><p>Statusphere sells "guaranteed posts," Stack charges only for completed posts, Collabstr holds money in escrow, HFC backfills no-shows, minisocial has a make-good clause. Benable's card on file is the only one that pays back gifted product.</p></div>
+      <div><h4>Half of gifted creators never post</h4><p>Social Cat says 40 to 50% of accepted creators don't deliver and there's no way to recover the product, minisocial's own contract says about 50%, Traackr says 61%. That's the real value of someone chasing and verifying.</p></div>
+      <div><h4>Content shops are pulling ahead on data</h4><p>Billo shows per-creator ROAS, CTR and hook rate against industry medians, and its AI script generator explains itself with real ad data. Nobody on the reach side has anything like it yet, Benable included.</p></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="eyebrow">By quadrant</div>
+    <h2 class="sec">Same placements, as a list</h2>
+    <div class="qgrid" id="qgrid"></div>
+  </section>
+
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="prof-title" hidden>
+  <div class="dbar"><button type="button" class="btn close" id="close-drawer">Close</button></div>
+  <article class="profile" id="profile"></article>
+</div>
+
+
+</div>
+
 <script>
 /* ---------------- All platforms: bento cards ---------------- */
 const BENTO = [
-  { name: "Benable", hero: true, cost: "$50-80 / creator", managed: "Yes", guarantee: "Yes", rights: "Organic incl., ads extra", pool: "1M+" },
-  { name: "JoinBrands", cost: "$25-69 / creator", managed: "Add-on", guarantee: "Refund only", rights: "Full", pool: "500K+" },
-  { name: "Billo", cost: "$150-250 / video", managed: "No", guarantee: "No", rights: "Full", pool: "5K" },
-  { name: "Home From College", cost: "$194 / creator", managed: "Self-serve default", guarantee: "2-strike + backfill", rights: "Full (organic+paid)", pool: "1M profiles" },
-  { name: "Collabstr", cost: "$271 / creator", managed: "No", guarantee: "No", rights: "Included", pool: "100K" },
-  { name: "Insense", cost: "$460 / creator", managed: "Add-on", guarantee: "No", rights: "Full", pool: "125K" },
-  { name: "Social Cat", cost: "$750+ / creator", managed: "Add-on ($250/collab)", guarantee: "No", rights: "Partial (opted-in only)", pool: "90K + 500K scraped" },
+  { name: "Benable", hero: true, cost: "$50-80 / creator", managed: "Yes, included", guarantee: "Yes, card on file", rights: "Organic incl., ads $25-75" },
+  { name: "JoinBrands", cost: "$29-58 / video, self-serve", managed: "$4,000/mo add-on", guarantee: "Refund if cancelled", rights: "Full" },
+  { name: "Billo", cost: "$150-250 / video", managed: "Offered, not priced", guarantee: "No", rights: "Full" },
+  { name: "Home From College", cost: "$194 / creator", managed: "From $150K", guarantee: "2-strike + backfill", rights: "Full (organic+paid)" },
+  { name: "Collabstr", cost: "$271+ / creator", managed: "No (reminders only)", guarantee: "Escrow only", rights: "Included" },
+  { name: "Insense", cost: "$450 / creator, managed", managed: "$4,600/mo add-on", guarantee: "No", rights: "Full" },
+  { name: "Social Cat", cost: "$750+ / creator, managed", managed: "$250/collab add-on", guarantee: "No", rights: "Opted-in creators only" },
 ];
 
 function renderBento() {
@@ -230,7 +555,6 @@ function renderBento() {
         <div class="stat"><span class="k">Managed</span><span class="v">${hero.managed}</span></div>
         <div class="stat"><span class="k">Guarantee</span><span class="v">${hero.guarantee}</span></div>
         <div class="stat"><span class="k">Rights</span><span class="v">${hero.rights}</span></div>
-        <div class="stat"><span class="k">Pool</span><span class="v">${hero.pool}</span></div>
       </div>
     </div>`;
   const restHtml = rest.map(b => `
@@ -240,9 +564,60 @@ function renderBento() {
       <div class="brow"><span class="k">Managed</span><span class="v">${b.managed}</span></div>
       <div class="brow"><span class="k">Guarantee</span><span class="v">${b.guarantee}</span></div>
       <div class="brow"><span class="k">Rights</span><span class="v">${b.rights}</span></div>
-      <div class="brow"><span class="k">Pool</span><span class="v">${b.pool}</span></div>
     </div>`).join("");
   return `<div class="bento">${heroHtml}${restHtml}</div>`;
+}
+
+
+/* ---------------- All platforms: price vs effort ---------------- */
+/* Cost per creator post, product excluded. lo/hi = range, mid = the dot. */
+const PE_TIME_COST = 25; // Tony's estimate: 30 min of the brand's team per creator on self-serve, at $50/hr
+const PE_GROUPS = [
+  { key: "managed", title: "Managed: they do the work", sub: "your team only approves creators and content", rows: [
+    { name: "Benable", note: "gifted, cheaper with scale", lo: 50, hi: 80, mid: 60, us: true },
+    { name: "JoinBrands managed", note: "$4,000/mo + $25 videos + 15%", lo: 69, hi: 229, mid: 69, rangeNote: "at 100 creators, $229 at 20" },
+    { name: "Insense managed", note: "$4,600/mo for 20 creators", lo: 450, hi: 450, mid: 450 },
+    { name: "Agency", note: "Collabstr's estimate: $5,000 for 10", lo: 500, hi: 500, mid: 500 },
+    { name: "Social Cat managed", note: "$250 fee + creator budget", lo: 750, hi: 800, mid: 750 },
+  ]},
+  { key: "self", title: "Self-serve: your team does the work", sub: "sourcing, shipping, chasing late posts, review", rows: [
+    { name: "Social Cat", note: "gifted; 40-50% never post", lo: 20, hi: 40, mid: 30, rangeNote: "per post that goes live" },
+    { name: "JoinBrands", note: "$25 prepaid or $50, +15%", lo: 29, hi: 58, mid: 58, rangeNote: "$29 needs 100 prepaid" },
+    { name: "Insense", note: "$500/mo plan, 20 creators", lo: 135, hi: 300, mid: 245 },
+    { name: "Billo", note: "files only; posting extra", lo: 150, hi: 250, mid: 175 },
+    { name: "Home From College", note: "$150 post, Premium Plus, 50", lo: 194, hi: 194, mid: 194 },
+    { name: "Collabstr", note: "typical $250-1,000, +5%", lo: 271, hi: 533, mid: 271, rangeNote: "median under $500" },
+  ]},
+];
+const PE_MIN = 15, PE_MAX = 1000, PE_TICKS = [25, 50, 100, 250, 500, 1000];
+const pePct = v => ((Math.log(v) - Math.log(PE_MIN)) / (Math.log(PE_MAX) - Math.log(PE_MIN))) * 100;
+
+function renderPE() {
+  const grid = PE_TICKS.map(t => `<span class="grid" style="left:${pePct(t)}%"></span>`).join("");
+  const fmt = (lo, hi, mid) => lo === hi ? money(mid) : `${money(lo)}-${money(hi)}`;
+  const head = `<div class="pe-row pe-colhead" aria-hidden="true"><div></div><div></div><div class="vl">Cash</div><div class="vl">All in</div></div>`;
+  const groups = PE_GROUPS.map(g => {
+    const add = g.key === "self" ? PE_TIME_COST : 0;
+    const rows = g.rows.map(r => {
+      const cash = fmt(r.lo, r.hi, r.mid);
+      const lo = r.lo + add, hi = r.hi + add, mid = r.mid + add;
+      const all = fmt(lo, hi, mid);
+      const tip = `${r.name}: ${cash} cash${add ? `, ${all} with $25 of your team's time` : ", no team time counted"}. ${r.note}${r.rangeNote ? "; " + r.rangeNote : ""}.`;
+      return `<div class="pe-row${r.us ? " us" : ""}" title="${tip}">
+        <div class="nm">${r.name}<small>${r.note}</small></div>
+        <div class="pe-track" aria-hidden="true">${grid}
+          ${hi > lo ? `<span class="rng" style="left:${pePct(lo)}%;width:${pePct(hi) - pePct(lo)}%"></span>` : ""}
+          <span class="dot" style="left:${pePct(mid)}%"></span>
+        </div>
+        <div class="vl cash">${cash}</div>
+        <div class="vl">${all}${r.rangeNote ? `<small>${r.rangeNote}</small>` : ""}</div>
+      </div>`;
+    }).join("");
+    return `<div class="pe-group"><div class="pe-ghead"><b>${g.title}</b><span>${g.sub}</span></div>${rows}</div>`;
+  }).join("");
+  const ticks = PE_TICKS.map(t => `<span style="left:${pePct(t)}%">${money(t)}</span>`).join("");
+  document.getElementById("pe-body").innerHTML = head + groups +
+    `<div class="pe-axis" aria-hidden="true"><div></div><div class="ticks">${ticks}</div><div></div><div></div></div>`;
 }
 
 /* ---------------- All platforms: radar ---------------- */
@@ -252,31 +627,30 @@ const RADAR_AXES = [
   { key: "guarantee", label: "Guarantee" },
   { key: "rights", label: "Rights" },
   { key: "data", label: "Ad data" },
-  { key: "pool", label: "Pool size" },
 ];
 
 const RADAR_COMPARE = {
   price: {
-    insense: { us: "$50-80 / creator", them: "$460 / creator", line: "Insense runs about $460 a creator once you add their management fee, the creator payment, and commission. Benable runs $50 to $80 a creator, cheaper at scale, because our creators are gifted, not paid." },
+    insense: { us: "$50-80 / creator", them: "$450 / creator", line: "Insense runs about $450 a creator once you add their management fee, the creator payment, and commission. Benable runs $50 to $80 a creator, cheaper at scale, because our creators are gifted, not paid." },
     billo: { us: "$50-80 / creator", them: "$150-250 / video", line: "Billo's typical video runs $150 to $200, before their $89 editing add-on. Benable runs $50 to $80 a creator, fully managed, cheaper at scale." },
     joinbrands: { us: "$4,999 / month", them: "$6,875 / month", line: "Fully managed, 100 creators a month costs $6,875 with them and $4,999 with us. On their self-serve side they can hit $25 a video, but that needs a 100-post commitment and is before their fee." },
-    collabstr: { us: "$50-80 / creator", them: "$250+ / creator", line: "Even Collabstr's cheapest creators start at $250. Benable runs $50 to $80 a creator, gifted, no bidding involved." },
+    collabstr: { us: "$50-80 / creator", them: "$250-1,000 / creator", line: "Collabstr says most hires land between $250 and $1,000, with the median under $500. Small accounts list for less, but you still find, negotiate with and manage each one. Benable runs $50 to $80 a creator, gifted, no bidding involved." },
     socialcat: { us: "$50-80 / creator", them: "$750+ / creator, managed", line: "Their managed option runs about $750 to $800 a creator once you add the management fee and influencer budget. Their subscription tiers look cheaper on paper, $99 to $299 a month, but that's self-serve, gifted only, and capped at 30 creators total." },
     hfc: { us: "$50-80 / creator", them: "$194 / creator", line: "Their own in-feed benchmark is $150 a post plus their subscription, about $194 a creator once you add it up. Benable runs $50 to $80, though theirs bundles paid ad rights in, ours doesn't." },
   },
   management: {
     insense: { us: "Included", them: "$4,600/mo add-on", line: "Insense's managed tier is a $4,600 a month add-on. It's included with us from your first creator." },
-    billo: { us: "Included", them: "Not offered", line: "Billo has no true management tier. You personally review every applicant yourself, even at their top level." },
+    billo: { us: "Included", them: "Offered, not priced", line: "Billo offers a fully managed option but didn't price it on our call. On their standard packs, even the $5,000 pack's success manager doesn't replace reviewing up to 50 applicants per campaign yourself." },
     joinbrands: { us: "Included", them: "$4,000/mo add-on", line: "Their managed service is $4,000 a month, on top of what you pay creators. Ours is one flat, lower price." },
-    collabstr: { us: "Included", them: "Not offered", line: "There's no management option at any price on Collabstr. You source, negotiate, and chase everyone yourself." },
+    collabstr: { us: "Included", them: "Not offered", line: "Collabstr has no fully managed option. They send reminders and have community managers who nudge quiet creators, but sourcing, negotiating and reviewing are all on you." },
     socialcat: { us: "Included", them: "$250/collab add-on", line: "Social Cat's management fee is $250 per collaboration, on top of the influencer budget. Benable's management is built into the price, not billed separately." },
     hfc: { us: "Included", them: "Self-serve default", line: "Home From College's standard tier is your team running the workflow end to end. Premium tiers add a specialist for advice, not full management, and their actual managed service starts at $150K. Benable's management is included at any size." },
   },
   guarantee: {
     insense: { us: "Contract + card on file", them: "Contract only", line: "Insense has contracts, but no card on file, so there's not much teeth if a creator ghosts." },
-    billo: { us: "Contract + card on file", them: "Unclear", line: "We asked Billo twice what happens when a creator misses a deadline. Both times, they dodged the question." },
+    billo: { us: "Contract + card on file", them: "No stated policy", line: "Billo gives creators a 5-day deadline and shows each one's on-time rate, but never said what happens when a video is late or doesn't arrive. They also couldn't say how many creators to book to reliably get 50." },
     joinbrands: { us: "Contract + card on file", them: "Refund on cancel", line: "JoinBrands refunds you if a creator cancels, which is reactive. We prevent the no-show up front with a signed contract and a card on file." },
-    collabstr: { us: "Contract + card on file", them: "None", line: "Collabstr has no posting guarantee at all. If a creator doesn't deliver, that's on you." },
+    collabstr: { us: "Contract + card on file", them: "Escrow", line: "Collabstr holds your money in escrow until you accept the content, so you don't pay for work that never arrives. There's no guarantee a creator posts, and product you shipped isn't covered." },
     socialcat: { us: "Contract + card on file", them: "None", line: "Social Cat has no recourse when gifted product doesn't convert to a post. Their own words: that's the biggest problem with product seeding in general." },
     hfc: { us: "Contract + card on file", them: "2-strike policy, auto-backfill", line: "Home From College will backfill a student who misses a deadline, and restrict repeat offenders after two strikes. That's a real reliability mechanism, though it protects the workflow, not your product spend the way a card on file does." },
   },
@@ -296,24 +670,16 @@ const RADAR_COMPARE = {
     socialcat: { us: "Not yet", them: "No", line: "Neither platform offers ad-performance data tied to individual creators today." },
     hfc: { us: "Not yet", them: "Meta integration, real-time", line: "Home From College pulls in content and engagement stats in real time once a creator posts, live but recent, launched about 2 months before this call. Benable has nothing like this yet." },
   },
-  pool: {
-    insense: { us: "1M+", them: "125K", line: "We're about 8 times bigger, 1M+ creators to their 125K." },
-    billo: { us: "1M+", them: "5K", line: "Billo's pool is small by design, 5K total. Ours is over 1M." },
-    joinbrands: { us: "1M+", them: "500K+", line: "They lean on scale as a selling point, but we're actually larger too, 1M+ to their 500K+." },
-    collabstr: { us: "1M+", them: "100K vetted", line: "We're about 10 times bigger, 1M+ versus their 100K vetted creators." },
-    socialcat: { us: "1M+", them: "90K opted-in + 500K scraped", line: "Benable's pool is over 1M. Social Cat's is smaller and split in two: 90K creators who actually signed up, plus a larger scraped database where outreach and rights work differently." },
-    hfc: { us: "1M+", them: "1M profiles, 3,500+ campuses", line: "Both platforms are around 1M. Theirs skews entirely college-age and campus-based; Benable's is broader." },
-  },
 };
 
 const RADAR_SCORES = {
-  benable:    [5, 5, 5, 3, 2, 4],
-  insense:    [1, 3, 2, 5, 2, 3],
-  billo:      [3, 1, 1, 5, 5, 1],
-  joinbrands: [4, 3, 3, 5, 2, 5],
-  collabstr:  [2, 1, 1, 4, 2, 3],
-  socialcat:  [2, 3, 1, 3, 2, 4],
-  hfc:        [2, 3, 3, 5, 3, 4],
+  benable:    [5, 5, 5, 3, 2],
+  insense:    [1, 3, 2, 5, 2],
+  billo:      [3, 2, 1, 5, 5],
+  joinbrands: [4, 3, 3, 5, 2],
+  collabstr:  [2, 1, 2, 4, 2],
+  socialcat:  [2, 3, 1, 3, 2],
+  hfc:        [2, 3, 3, 5, 3],
 };
 const RADAR_NAMES = { insense: "Insense", billo: "Billo", joinbrands: "JoinBrands", collabstr: "Collabstr", socialcat: "Social Cat", hfc: "Home From College" };
 const VB = 400, RCX = 200, RCY = 200, RR = 78;
@@ -392,7 +758,7 @@ function renderAllPanel() {
     ${renderBento()}
     <div class="radar-card">
       <div class="section-head">
-        <h2>The same six things, one shape</h2>
+        <h2>The same five things, one shape</h2>
         <div class="how-to">
           <p class="how-to-label">How to read this chart</p>
           <ol>
@@ -411,6 +777,15 @@ function renderAllPanel() {
         ${renderAxisButtons()}
       </div>
       <div class="axis-info" id="axis-info"></div>
+    </div>
+    <div style="height:44px"></div>
+    <div class="section-head">
+      <h2>What one creator post costs, all in</h2>
+      <p class="sub">Cash price plus the value of your team's time, product excluded. For self-serve platforms we add $25 per creator: about 30 minutes of your team reviewing applicants and chasing late posts, at $50 an hour (Tony's estimate from the JoinBrands demo). Managed programs add nothing.</p>
+    </div>
+    <div class="pe-card">
+      <div id="pe-body"></div>
+      <p class="pe-note">The bar shows the all-in price, on a log scale. Ranges run low to high on each platform's own numbers from our demo calls; the dot is the typical case. Benable is $50 to $80 a creator depending on volume. Paid ad rights are extra on Benable ($25 to $75 a video) and included on most others.</p>
     </div>
   `;
 }
@@ -442,30 +817,34 @@ function initRadarControls() {
 const DATA = {
   insense: {
     name: "Insense",
+    goodList: [
+      "Creator quality. Their $100 minimum anchors real rates, and creators know what they're signing up for.",
+      "Full perpetual rights on everything, plus Meta and TikTok partnership ads.",
+    ],
     claimList: [
       "We're the most vetted network out there: 125K creators, first-party Instagram and TikTok data.",
       "You get a team that already knows these creators, not a cold list.",
     ],
     winList: [
-      "Their managed tier works out to about $460 per creator once you add it all up.",
-      "We do the same job for $58, because our creators are gifted, not paid.",
+      "Their managed tier works out to about $450 per creator once you add it all up.",
+      "We do the same job for about $60 a creator at that volume, because our creators are gifted, not paid.",
     ],
     mode: "perUnit",
     unit: "creators",
     defaultN: 20,
-    themRate: 460,
+    themRate: 450,
     usRate: 58,
     unitLabel: "per creator, fully managed",
     rows: [
       { label: "Managing the program", amount: 230, note: "$4,600 for 20 creators, their quoted volume" },
       { label: "Creator payment", amount: 200, note: "their stated typical rate, $200 to $250" },
-      { label: "Platform commission, 15%", amount: 30 },
+      { label: "Platform fee, 10%", amount: 20, note: "Brand plan rate; 20% on the trial month" },
     ],
     totalLabel: "Total per creator",
     caveat: "Their quote is for 20 creators a month. Benable's own rate runs $50-80/creator, cheaper at scale, not counting paid ad-usage rights.",
     leavesOut: [
       "Their dashboard shows who's about to miss a deadline, but nothing chases them for you. That follow-up is still on your team.",
-      "The managed tier starts with an onboarding call to size the brief. Day-to-day sourcing still comes back to you unless you're on the dedicated add-on.",
+      "On the $500-a-month plan without the dedicated manager, your team launches briefs, shortlists creators and chases posts. Their own split: about 80% of brands self-serve.",
     ],
     facts: [
       { label: "Usage rights", them: "Full rights, in perpetuity", us: "Organic included; paid ad usage is ~$25-75/video, opt-in creators only" },
@@ -474,13 +853,17 @@ const DATA = {
   },
   billo: {
     name: "Billo",
+    goodList: [
+      "Real ad-performance data per creator: ROAS, CTR and hook rate against industry medians.",
+      "AI script tool that explains its choices, and an in-house editing team.",
+    ],
     claimList: [
       "Our Meta performance data shows ROAS, CTR, and hook rate for every creator.",
       "Our AI script tool tells you why each hook works, not just what to say.",
     ],
     winList: [
-      "That's real, and worth acknowledging. But their own working average is $150 to $200 a video before the $89 editing add-on.",
-      "You still personally review every applicant yourself, even at their top tier. We run about a third of their price, fully managed.",
+      "Their own working average is $150 to $200 a video before the $89 editing add-on, and that's a file, not a post. Posting on the creator's account costs extra.",
+      "On their standard packs you still review every applicant yourself, even with a success manager. We run about a third of their price, fully managed.",
     ],
     mode: "perUnit",
     unit: "videos",
@@ -500,17 +883,21 @@ const DATA = {
     ],
     facts: [
       { label: "Usage rights", them: "Full rights, in perpetuity", us: "Organic included; paid ad usage is ~$25-75/video, opt-in creators only" },
-      { label: "Known gap", them: "No clear late-deadline policy (asked twice, dodged)", us: "No Meta ad-performance layer yet" },
+      { label: "Known gap", them: "No stated policy for late or missing videos", us: "No Meta ad-performance layer yet" },
     ],
   },
   joinbrands: {
     name: "JoinBrands",
+    goodList: [
+      "Cheap at volume: $25 a video if you prepay 100.",
+      "Full rights and a TikTok Spark code on every job, at any price.",
+    ],
     claimList: [
       "We connect you to half a million creators.",
       "Videos can run as low as $25, if you commit to 100 posts upfront.",
     ],
     winList: [
-      "That $25 is real, but pay-as-you-go is $50 minimum, and their 15% fee brings it to $28.75. That's self-serve, before your own time, and before what the rights are worth.",
+      "That $25 needs 100 posts paid upfront, and their 15% fee makes it $28.75. Pay-as-you-go is $50 minimum, $57.50 with the fee. Both are self-serve, before your own time.",
       "Fully managed, 100 creators a month costs $6,875 with them. Ours is $4,999 for the same thing.",
     ],
     mode: "program",
@@ -518,7 +905,7 @@ const DATA = {
     defaultN: 100,
     unitLabel: "fully managed, 100 creators a month",
     totalLabel: "Total per month",
-    caveat: "$4,999 is our Preferred Partner rate at 100 creators specifically ($49.99/creator). The calculator above extrapolates both sides from that single 100-creator data point using JoinBrands' own real formula; Benable's side assumes $49.99/creator holds at any volume typed in.",
+    caveat: "$4,999 is our Preferred Partner rate at 100 creators ($49.99/creator). JoinBrands' side uses their own formula ($4,000 plus $25 a video plus 15%); Benable's side uses our rate at the volume you type, $50 to $80 a creator.",
     leavesOut: [
       "<b>Finding the creators:</b> you review about 5 profiles to find 1 that meets your bar, roughly 500 profiles a month to fill 100 spots.",
       "<b>Chasing late posts:</b> about 30% of their creators miss the deadline. That's around 30 creators you're checking in on and eventually escalating to support at any given time.",
@@ -530,13 +917,17 @@ const DATA = {
   },
   collabstr: {
     name: "Collabstr",
+    goodList: [
+      "Transparent prices and escrow: you only pay for content you accept.",
+      "95.8% of content accepted without revision, per their team.",
+    ],
     claimList: [
       "Our bidding marketplace can land good pricing on higher-end UGC.",
       "You negotiate directly with creators yourself, full control over who and how much.",
     ],
     winList: [
-      "There's no managed tier at any price. Even their cheapest creators run $250.",
-      "That's more than four times what we charge per creator, and you're doing all the sourcing and chasing solo.",
+      "There's no fully managed option. Their own team says most hires land at $250 to $1,000.",
+      "Even the low end is more than four times what we charge per creator, and you do the sourcing, negotiating and review yourself.",
     ],
     mode: "perUnit",
     unit: "creators",
@@ -546,13 +937,13 @@ const DATA = {
     unitLabel: "per creator, all in",
     rows: [
       { label: "Subscription (amortized, 50/mo)", amount: 8 },
-      { label: "Creator rate (their stated floor)", amount: 250 },
+      { label: "Creator rate (low end of their typical range)", amount: 250, note: "their team: most hires $250 to $1,000, median under $500" },
       { label: "Transaction fee, 5%", amount: 13 },
     ],
-    totalLabel: "Minimum total, per creator",
-    caveat: "Uses their cheapest listed rate, most campaigns cost more than this. Benable's own rate runs $50-80/creator, cheaper at scale.",
+    totalLabel: "Low-end total, per creator",
+    caveat: "Uses the low end of their typical range at $400/mo Premium. Small accounts list for less (around $50 a story, $100 a post), but Collabstr says most hires cost more. Benable's own rate runs $50-80/creator, cheaper at scale.",
     leavesOut: [
-      "There's no management tier to buy at any price. You personally review 20 to 50 bids per job, negotiate each one, and chase every delivery yourself.",
+      "There's no fully managed option. You review 20 to 50 bids per job and negotiate each one. They send reminders and nudge quiet creators, but the rest is on your team.",
       "Their own team told us most churn is silent: brands quietly testing the channel and disappearing without ever saying what didn't work, so problems never get surfaced or fixed.",
     ],
     facts: [
@@ -562,13 +953,17 @@ const DATA = {
   },
   socialcat: {
     name: "Social Cat",
+    goodList: [
+      "The cheapest way to start: $99 a month for gifted collabs.",
+      "Fast applicants, up to 50 in the first 3 days.",
+    ],
     claimList: [
       "Subscription plans start at $99 a month for 5 creators, cancel anytime.",
       "Most of our brands do gifted collaborations, that's what we're known for.",
     ],
     winList: [
       "That $99 tier is self-serve and gifted only. You review every applicant yourself, and 40 to 50% still won't post, with no way to recover the product cost.",
-      "Their managed option runs about $750 a creator once you add the management fee and influencer budget, by their own rough math closer to $800. We do the same job for $58.",
+      "Their managed option runs about $750 a creator once you add the management fee and influencer budget, by their own rough math closer to $800. We do the same job for $50 to $80.",
     ],
     mode: "perUnit",
     unit: "creators",
@@ -594,6 +989,10 @@ const DATA = {
   },
   hfc: {
     name: "Home From College",
+    goodList: [
+      "Gen Z and campus reach nobody else has: ambassadors, events, in-store.",
+      "Paid ad rights included in their $150 post, plus backfill when a student misses a deadline.",
+    ],
     claimList: [
       "We're the largest Gen Z and college database out there, 1M+ profiles across 3,500+ campuses.",
       "We're not just content, brands run full ambassador programs, campus activations, and career-style gigs through us.",
@@ -634,7 +1033,10 @@ const panelsEl = document.getElementById("panels");
 const money = n => "$" + Math.round(n).toLocaleString();
 
 function joinbrandsThem(N) { return 4000 + (N * 25 * 1.15); }
-function joinbrandsUs(N) { return N * 49.99; }
+/* Benable per-creator rate by volume, from Tony's own quotes: $699 for 10 (Sep 8), about $60 at 15 to 25,
+   "just under $60" at 50 (Sep 17), $4,999 for 100 (Sep 10). Range he gives: $80 down to $50, cheaper with scale. */
+function benRate(N) { return N >= 100 ? 49.99 : N >= 50 ? 58 : N >= 15 ? 60 : 70; }
+function joinbrandsUs(N) { return N * benRate(N); }
 
 function updateStrip(key) {
   const d = DATA[key];
@@ -646,12 +1048,14 @@ function updateStrip(key) {
     document.getElementById("row-videos-" + key).textContent = money(N * 25);
     document.getElementById("row-fee-" + key).textContent = money(N * 25 * 0.15);
   } else {
-    them = d.themRate * N; us = d.usRate * N;
+    them = d.themRate * N; us = benRate(N) * N;
   }
   const pct = Math.round((1 - us / them) * 100);
   document.getElementById("them-total-" + key).textContent = money(them);
   document.getElementById("us-total-" + key).textContent = money(us);
   document.getElementById("badge-" + key).textContent = pct + "% less";
+  const un = document.getElementById("unit-" + key);
+  if (un) un.textContent = `Monthly total for ${N} ${d.unit}. Benable at ${money(benRate(N))} a creator at this volume.`;
 }
 
 function renderItemRows(d) {
@@ -682,6 +1086,10 @@ function renderPanel(key) {
         <div class="label">Why we win</div>
         <ul>${d.winList.map(x => `<li>${x}</li>`).join("")}</ul>
       </div>
+    </div>
+    <div class="good">
+      <div class="label">Where they're good (say it, it builds trust)</div>
+      <ul>${d.goodList.map(x => `<li>${x}</li>`).join("")}</ul>
     </div>
 
     <div class="card">
@@ -724,7 +1132,7 @@ function renderPanel(key) {
         </div>
         <span class="savings" id="badge-${key}">-</span>
       </div>` : ""}
-      <p class="unit-note">${d.unitLabel}</p>
+      <p class="unit-note" id="unit-${key}">${d.unitLabel}</p>
       <hr class="divider-line">
       <div class="leaves">
         <h3>What that price doesn't include</h3>
@@ -760,6 +1168,7 @@ function init() {
     if (key === "all") {
       panel.innerHTML = renderAllPanel();
       panelsEl.appendChild(panel);
+      renderPE();
       initRadarControls();
     } else {
       panel.innerHTML = renderPanel(key);
@@ -776,6 +1185,414 @@ function selectTab(key) {
 }
 
 init();
+
+/* ---------------- view switch ---------------- */
+function showView(v) {
+  document.getElementById("salesview").hidden = v !== "sales";
+  document.getElementById("teamview").hidden = v !== "team";
+  document.getElementById("topbar").classList.toggle("wide", v === "team");
+  document.querySelectorAll(".views .view").forEach(b => {
+    const on = b.dataset.view === v;
+    b.classList.toggle("on", on); b.setAttribute("aria-selected", on);
+  });
+}
+document.querySelectorAll(".views .view").forEach(b => b.addEventListener("click", () => showView(b.dataset.view)));
+
+/* ---------------- team research view ---------------- */
+(function(){
+
+/* x: 0 self-managed to 100 full-managed. y: 0 buying content to 100 buying audience. */
+const P = [
+  {id:'benable', name:'Benable', x:80, y:66, side:'left', rights:'ext', ben:true,
+   kind:'Managed, gifted only',
+   what:'Hand-picked creators post in feed on Instagram or TikTok, plus a recommendation on Benable. Our team runs invites, briefing, chasing, review and post tracking.',
+   price:'$50 to $80 a creator, cheaper with scale', rightsTxt:'Organic reshare included; paid rights $25 to $75 a video, only for creators who opt in',
+   depth:'Our own offer: Tony\'s package email (Sep 8), sales calls and the Insense debrief (Sep 17)',
+   who:'Small to mid DTC brands that want creators posting about them every month without running it themselves.',
+   how:['Creators picked from the top 1% of the Benable community, each with a note on why they fit','Brand approves every creator and controls the brief, talking points and product options','Gifting runs through the brand\'s Shopify store','Required in-feed post plus a Benable recommendation from every creator'],
+   priceL:['$50 to $80 a creator; Tony: "we make it up as we go"','Quotes seen: $699 for 10, about $60 a creator at 50, $4,999 for 100','Subscriptions range from $599 to $6,000 a month','No influencer fees; the only other cost is the product'],
+   stands:['Content guarantee: the creator\'s card is on file and billed if they don\'t post, and the brand gets the product cost back','90%+ post rate','Everything handled by the ops team, including texts and DMs'],
+   watch:['Paid usage rights are an add-on; most competitors include them','No content-only files, no Spark or partnership codes yet','Collab-ready creators: Tony estimates about 50,000, vs JoinBrands\' 500K (the 1M+ figure is all app users)'],
+   win:['Cheapest option where someone else runs it: $50 to $80 vs $69 to $800 for other managed programs','No cash to creators, no fee stack','The only guarantee that pays back gifted product'],
+   lose:['Stack Influence is cheaper on the fee alone','GRIN and Social Cat are cheaper as software','Content-only shops are cheaper per file'],
+   open:['Real delivered post rate per brand, from the portal']},
+
+  {id:'statusphere', name:'Statusphere', pub:true, x:90, y:76, side:'left', rights:'inc',
+   kind:'Managed, guaranteed posts',
+   what:'Guaranteed posts from creators they pick, product shipped from their own warehouse. Brand doesn\'t pre-approve creators or posts.',
+   price:'From $10,000', rightsTxt:'Organic perpetual, paid use for one year',
+   depth:'Public pages and reviews only',
+   who:'Brands with budget that want guaranteed volume in the thousands. Orlando.',
+   how:['Brand ships inventory to Statusphere\'s warehouse','Statusphere matches creators and ships product in the "teal box" within 48 hours','Brand buys prepaid credits redeemed for posts, seeding or Shorts'],
+   priceL:['"Initial investments starting at $10,000"','Third parties cite a $3,500/mo floor on an annual contract','Their own benchmark: $100 to $300 per micro-influencer post','Spark or partnership ad codes about $100 each, 30 days'],
+   stands:['Warehouse fulfillment, brand never ships','Bigger creators: median TikTok 31.7K, Instagram 12.5K followers','"Guaranteed posts" as the headline promise'],
+   watch:['Brand can\'t hand-pick creators or pre-approve posts, the top two review complaints','Fees "non-refundable under any circumstance"','No explicit make-good in the public terms'],
+   win:['Entry ticket: $699 vs $10,000','Brand approves every creator','Month to month'],
+   lose:['Guaranteed volume in writing','Warehouse fulfillment','Rights bundled'],
+   open:['Credit price per post format','Whether $10K is one-time or per campaign','What happens when a guaranteed post never lands']},
+
+  {id:'stack', name:'Stack Influence', pub:true, x:64, y:58, side:'left', rights:'inc',
+   kind:'Managed product-for-post',
+   what:'Nano creators buy the product, post, and get reimbursed. Brand pays only for completed posts but can\'t pick the creators.',
+   price:'$30 to $39 per post, 50 to 100 creator minimum', rightsTxt:'6 months, organic and paid',
+   depth:'Public pages and reviews only',
+   who:'Amazon and DTC brands wanting lots of small posts cheaply. Miami, $1.3M seed.',
+   how:['Creator buys through the brand\'s store or Amazon listing, posts, then gets reimbursed','Brand reimburses retail plus shipping, tax and PayPal fees, billed weekly','Charged only for completed posts'],
+   priceL:['$39 list, $30 average, about $20 at scale per post','$0 subscription, a deposit before onboarding','Minimum 50 to 100 creators per product, 2 months','Products must retail at $15 to $100'],
+   stands:['Pay-for-performance pricing','Brand gets a real retail sale from each creator purchase'],
+   watch:['The 50 to 100 creator minimum and 6-month rights come from their help center; the pricing page only says "$30 on average" and "full rights"','Average creator has about 2,500 followers','Brand cannot select creators','Amazon return abuse: creators take the reimbursement and return the product','BBB rating F'],
+   win:['Brand picks every creator','No 50 to 100 minimum','Longer rights options, bigger creators'],
+   lose:['About half Benable\'s fee per post','Pay only for completed posts'],
+   open:['Deposit size and refund terms','Real quote at 50 posts']},
+
+  {id:'hummingbirds', name:'Hummingbirds', x:88, y:52, side:'left', rights:'inc',
+   kind:'Managed, retail-first',
+   what:'Everyday shoppers get a gift card, buy the product in store and post on Instagram. Brand keeps the right to repurpose. Only takes CPG brands with national retail.',
+   price:'Not public; call only', rightsTxt:'Repurpose rights bundled on every campaign',
+   depth:'Hands-on creator account, brand booking attempt, public pages',
+   who:'CPG brands with national retail distribution. Des Moines, $13M+ raised. "Retail performance with proof."',
+   how:['Dedicated campaign team plans and runs it; brand entry is a booked call only','Creators get a retail gift card, buy the exact SKU in store, post a Reel, Story or Post','Offers: brand-funded cash back tied to a SKU and retailer, shoppers upload receipts'],
+   priceL:['Brand pricing not public','Creator comp: $50 gift card on almost every campaign ($15 upfront, $35 after)','Gift card has to cover the product, so real creator pay is $50 minus the price'],
+   stands:['Nests: shareable curated product collections with live Offers, closest thing to Benable lists','Each creator purchase shows up as a real retail sale','Onboarding campaign: finishing it makes creators 2x more likely to be picked'],
+   watch:['Non-CPG or non-retail brands get a soft turn-away page, no calendar','Instagram only, TikTok barely mentioned','Creator count keeps changing definition: 11K, 50K, 65K "creators and shoppers"','Briefs are heavily scripted despite "not a script" copy'],
+   win:['Open to DTC, small and non-CPG brands they turn away','TikTok and Instagram','Benable lists plus posts'],
+   lose:['Retail sell-through proof for buyers','Receipt-verified cash-back Offers'],
+   open:['Platform fee and minimums','Cost per Offer redemption','What a CPG answer path shows']},
+
+  {id:'minisocial', name:'minisocial', pub:true, x:74, y:42, side:'left', rights:'inc',
+   kind:'Managed micro-influencer + UGC',
+   what:'Paid creators post, and the brand also gets fully licensed files plus 30 days of ad access. Sells the post and the content together.',
+   price:'From $3,000 for 10 creators', rightsTxt:'Perpetual, plus 30 days of ad codes',
+   depth:'Public pages and MSA only',
+   who:'DTC brands like Olipop, Native, Kopari, MeUndies. Founded 2018.',
+   how:['Pro Campaign: paid creators post','Seeding Campaign: gifting only, their contract says about 50% throughput','Everything inside a signed MSA'],
+   priceL:['"$3,000 for a campaign of 10 creators," creator pay included','About $300 per creator','Service fee non-refundable; net-15 invoice'],
+   stands:['Perpetual license plus 30 days of Spark, whitelisting and partnership ads','Written replacement or credit on the creator-pay part'],
+   watch:['Only 7% to 33% of the price seems to reach the creator'],
+   win:['3x to 5x cheaper per posted creator','Same "we run it" promise'],
+   lose:['Signed MSA, rights and ad codes included','Written make-good'],
+   open:['Deliverables per creator','Seeding price','Volume pricing at 25 and 50']},
+
+  {id:'kale', name:'Kale', x:56, y:90, side:'right', rights:'var',
+   kind:'Pays customers per post',
+   what:'Brand funds a reward pool and Kale pays customers who already bought $10 to $25 per post, based on views. No picking, no brief, no count promised. Run by an algorithm, not a team.',
+   price:'Not public; demo only', rightsTxt:'What the brand gets isn\'t public',
+   depth:'Public pages and case studies only',
+   who:'Brands with lots of existing customers: Sweetgreen, CAVA, Chili\'s, Planet Fitness, Urban Outfitters, DoorDash. Legal entity Palette Technologies.',
+   how:['Consumer app with two modes: Play (tournaments) and Create (brand challenges)','Customers post, Kale pays by views in cash plus in-app coins','Receipts and linked cards prove the purchase'],
+   priceL:['Brand pricing not public, not self-serve','Published cost per engagement $0.10 to $1','Derived cost per video about $44 to $200'],
+   stands:['Receipt as proof of purchase','OLIPOP Whole Foods case: +40% tagged TikToks, beat Q1 revenue goal by 50%'],
+   watch:['Needs an existing customer base to work','Mixed cash and coin payouts make creator pay hard to compare'],
+   win:['Brand-approved creators with a brief','A promised number of posts'],
+   lose:['No product cost at all','Cheaper at scale'],
+   open:['Minimum budget','Fee on top of the reward pool','Brand-side license']},
+
+  {id:'tribe', name:'TRIBE', x:34, y:84, side:'left', rights:'ext',
+   kind:'Creator marketplace, self-serve',
+   what:'Opt-in creators pitch ideas to a brief and set their own fee. Posts go to the creator\'s audience. Brand side is call-only.',
+   price:'Not public', rightsTxt:'Bought separately ("Boost & License")',
+   depth:'Public site only; brand account needs a call',
+   who:'Big brands: Mars, Unilever, P&G, LEGO, McDonald\'s, Disney, IKEA. Meta and TikTok partner badges.',
+   how:['Brand posts a brief, creators pitch ideas with their own fee','Brand buys rights to the best posts afterward and boosts them','Three products: Creator Marketing, Premium UGC, Employee-Generated Content'],
+   priceL:['No public pricing','Creators need 3K+ followers','"$34M+ paid out to creators"'],
+   stands:['TRIBE Unlocked: employees, suppliers and loyal customers as creators, a new category in the set','BrandMatch AI score for creator fit','Brand-Fans Groups: import creators you already work with'],
+   watch:['Creator count says 80,000+ on one page and 70,000+ on another','Rights sold separately, the opposite of Hummingbirds'],
+   win:['Price transparency','Rights terms simpler to explain'],
+   lose:['Enterprise logos and ad-platform partnerships','Employee and customer creator programs'],
+   open:['Pricing and fee model','Rights pricing','Where they\'re based']},
+  {id:'tribeplus', name:'TRIBE Plus', x:78, y:86, side:'right', rights:'ext', tier:true, parent:'tribe',
+   kind:'TRIBE\'s managed tier',
+   what:'Dedicated customer success team, strategy workshops, campaign and creator management, reporting.',
+   price:'Not public', rightsTxt:'Bought separately'},
+
+  {id:'passionfroot', name:'Passionfroot', x:12, y:90, side:'right', rights:'var',
+   kind:'B2B creator marketplace',
+   what:'Brands book sponsored posts from B2B creators on LinkedIn, X, YouTube, newsletters, Instagram and TikTok. An AI agent ("Zest") suggests creators, writes briefs and sends proposals.',
+   price:'$199/mo Starter, $499/mo Scale (seen in our account, Sep 23)', rightsTxt:'Not shown in what we saw',
+   who:'B2B and tech brands: Figma, Replit, ElevenLabs, Intercom, HubSpot, Framer, Gamma. Buying reach with a specific professional audience.',
+   how:['Pick "Partner" at signup; the account stays restricted until you pick a plan','Zest matches creators to your ideal customer, drafts briefs and personalized proposals; you approve and it sends','Pay creators from a prepaid "FrootWallet"','Analytics track reach, engagement, spend and CPM per post, including posts from outside the platform'],
+   priceL:['From the Plans page inside our restricted account (Sep 23); no public brand pricing page to cross-check','Starter $199/mo: up to 10 creator collabs, 1 seat, self-serve','Scale $499/mo: unlimited collabs, 3 seats, account manager and Slack support','Enterprise: custom, fully supported execution from sourcing to payments','Creator fees on top, paid from the wallet'],
+   stands:['AI agent that drafts briefs and proposals, and sends them once you approve','Amplify: fully managed launch campaigns (their example: Replit, 224 creators, 21M+ reach)','Investor referral program for portfolio companies'],
+   watch:['Built for B2B launches, not consumer products','Creator fees and rights terms not visible on a restricted account','Their help center (2024) says creators pay a 15% fee on deals sourced through the Passionfroot network'],
+   win:['Consumer brands and in-feed posts from everyday creators','Gifted, no cash creator fees'],
+   lose:['B2B and professional audiences','AI agent that handles outreach'],
+   open:['Creator price ranges','Rights terms','What Amplify costs']},
+  {id:'pfamplify', name:'Passionfroot Amplify', x:74, y:94, side:'left', rights:'var', tier:true, parent:'passionfroot', noline:true,
+   kind:'Passionfroot\'s managed tier',
+   what:'Fully managed launch, fundraise and milestone campaigns through creators, end to end. Their example plan estimated $25K for 18 creators.',
+   price:'Not public; example plan estimated $25K', rightsTxt:'Not shown in what we saw'},
+
+  {id:'tools', name:'Aspire · GRIN · Upfluence', pub:true, x:7, y:78, side:'right', rights:'var',
+   kind:'Creator-management software',
+   what:'Software for the brand\'s own team to find, gift, brief and pay creators. Buying reach, doing all the work.',
+   price:'GRIN $0 to $1,500/mo; Aspire and Upfluence around $15K/yr', rightsTxt:'Set per brief',
+   depth:'Public pages, reviews and Vendr data only',
+   who:'Brands with an in-house creator manager running paid, gifted and affiliate programs.',
+   how:['Discovery, outreach, briefs, Shopify gifting orders, content hub, payments','GRIN\'s AI agent "Gia" does outreach and nudges with the brand\'s approval'],
+   priceL:['GRIN: Free, $200, $500, $1,000, $1,500/mo, month to month','Aspire: demo only, Vendr median about $15,600/yr','Upfluence: 12-month minimum, about $1,276/mo plus $695 setup'],
+   stands:['GRIN went month to month in 2026, a big shift','Aspire has native Meta and TikTok ad permissions'],
+   watch:['No post guarantee on any of them','Legacy complaints about 12-month auto-renewals'],
+   win:['Labor and the post-rate risk are included','No annual lock'],
+   lose:['GRIN software alone is $40 to $50 per post, below Benable','Scale for 50+ creators a month'],
+   open:['GRIN credits per gifting action','Real Aspire quote at 10 to 25 creators']},
+
+  {id:'collabstr', name:'Collabstr', x:14, y:68, side:'right', rights:'var',
+   kind:'Pay-per-order marketplace',
+   what:'Creators list fixed-price packages, the brand orders and manages. Mostly posts to the creator\'s own audience.',
+   price:'Most hires $250 to $1,000; Premium $400/mo plus 5%', rightsTxt:'Picked per campaign from a rights checklist; their team says most creators include them',
+   depth:'Hands-on signup and onboarding, plus a demo call with Scott',
+   who:'Any size brand; McDonald\'s, ClickUp, Hopper, Orangetheory. Vancouver, bootstrapped. 1.7M+ brands and creators.',
+   how:['Self-serve, no fully managed option','Post a campaign and get 20 to 50 bids, or hire creators directly; you can negotiate','Automated reminders, plus community managers who nudge quiet creators; an account manager for every brand','Escrow holds payment until you accept the content'],
+   priceL:['Free (10% fee), Pro $249/mo yearly or $299 monthly, Premium $333 or $399 (5% fee), Enterprise from $1,000','Their team: most hires $250 to $1,000, median under $500','Small accounts list lower: about $50 a story, $100 a post','Creator also pays 15%'],
+   stands:['95.8% of content accepted without revision, per their team','AI briefs quote rates instantly before you hire','Creator CRM imports off-platform creators (relevant to Julia\'s filtering redesign)'],
+   watch:['Biggest problem, by their own account: onboarding and quiet churn from brands testing the channel','No Meta ad integration yet (on their roadmap)'],
+   win:['2x to 3x cheaper per posted creator','No one to manage'],
+   lose:['Full refund on non-delivery','Huge public-price creator pool','Zero commitment'],
+   open:['Can a product-only package exist','Is the $300+ AI-brief budget a real minimum']},
+
+  {id:'socialcat', name:'Social Cat', x:22, y:60, side:'right', rights:'inc',
+   kind:'Self-serve, gifted by default',
+   what:'A subscription buys monthly creator matches. The brand invites, ships and chases.',
+   price:'$99 to $299/mo for 5 to 30 matches', rightsTxt:'Perpetual license for opted-in creators',
+   depth:'Hands-on trial account plus a demo call',
+   who:'Small DTC brands, founders and solo marketers. London, 2 to 10 staff, bootstrapped.',
+   how:['Post a campaign and creators apply (first applicant within 24 hours), or search and invite','Accept, message with templates, send an in-app contract, ship','24-hour manual approval before you can search or see applicants','14 to 21 days from launch to content, per their team'],
+   priceL:['Essentials $99 (5 collabs), Performance $199 (15), Pro $299 (30); enterprise by email','7-day trial capped at 3 collabs, not disclosed on the pricing page','No platform fee; paid collabs settle off-platform','Managed: $250/mo per collaboration plus creator budget, about $4,000/mo for 5'],
+   stands:['"Deciding Factor" question makes the brand pick one tradeoff','Plain-language follower tiers','Three triage buckets: interested, reject, save for later','Mandatory reason and feedback before cancelling'],
+   watch:['553K creators is about 90K opted in plus a half-million scraped from Instagram, with no guaranteed rights','40 to 50% of gifted creators never post, and there\'s no way to recover the product ("the biggest problem with product seeding")','Paid in-feed posts start around $150','Hard cap of 30 creators a month','Contract builder defaults to "Paid" on a gifted match','No sales attribution, no Shopify integration','Sister company Clip sells ad videos: $124 self-serve, $400 to $600 managed'],
+   win:['Everything after the product ships: chasing, verification, ghost risk','Real post rate'],
+   lose:['$10 to $20 per match','Search depth and filters'],
+   open:['Is the contract binding','Does Deciding Factor change results','What "Replace collaborations" does']},
+
+  {id:'insense', name:'Insense', x:32, y:52, side:'left', rights:'inc',
+   kind:'Self-serve marketplace',
+   what:'Creators bid inside a price range, the brand picks and runs it. Sells both posted videos and content-only files.',
+   price:'$500/mo plan plus 7% to 20% on creator pay', rightsTxt:'Perpetual, including paid use',
+   depth:'Free account (no paid plan) plus a demo call with Ahmet',
+   who:'DTC brands running ads. New York, 157 staff.',
+   how:['Brand writes a brief with a price range, creators bid','Escrow releases on approval','Product seeding option exists, but posting is optional there'],
+   priceL:['No free trial: $650 trial month, card required','Brand plan $1,500 billed quarterly ($500/mo); Agency $800/mo','Fee on top: 20% trial, 10% Brand, 7% Agency','Influencer posts from $100 with an affiliate commission, $200 to $250 without'],
+   stands:['Perpetual paid rights on every paid deliverable','Spark and partnership ad codes','Unresponsive-creator button after 3 days'],
+   watch:['Top complaint: $1,500 quarterly auto-renewal with refund denied','Rate cards are images, not text','Trustpilot 3.6'],
+   win:['2x to 4x cheaper per posted creator','No wallet float, no auto-renewal trap','Brand doesn\'t screen 20 to 40 applications'],
+   lose:['Rights and ad plumbing','Content-only files'],
+   open:['What the rate-card images say']},
+  {id:'insensem', name:'Insense managed', x:72, y:30, side:'right', rights:'inc', tier:true, parent:'insense',
+   kind:'Insense\'s managed service',
+   what:'A dedicated platform manager launches briefs, shortlists creators and chases posts. About 20% of their brands use it.',
+   price:'$4,600/mo for 20 creators, plus creator pay', rightsTxt:'Perpetual, including paid use'},
+
+  {id:'joinbrands', name:'JoinBrands', x:14, y:44, side:'right', rights:'inc',
+   kind:'Self-serve marketplace',
+   what:'The brand sets a job price, creators apply, the brand runs every job. Sells posted videos and content-only files.',
+   price:'$0 to $499/mo plus 8% to 15% on top', rightsTxt:'Full transfer on payment, 365-day Spark code',
+   depth:'Hands-on live account plus a demo call',
+   who:'Brands comparing us on price, the one Tony\'s $2,000/mo prospect named. Five countries, TikTok Shop support.',
+   how:['Brand sets the price; creators apply, often through auto "Smart Apply"','Brand ships in 3 days, creator uploads within 10','JoinBrands pre-checks, brand has 10 days to approve, silence means approved','Escrow releases to the creator'],
+   priceL:['Plans $0, $99, $299, $499/mo with 15%, 12%, 10%, 8% on top','Pay-as-you-go $50 minimum; $25 a video if you prepay 100 (Social Blast)','Bigger creators default to $75 to $100','A live managed campaign (Goli) ran at $41.50 a job all in'],
+   stands:['TikTok Agents (the "3M+ creators" pool) is locked on Free, open on any paid plan','Local in-store jobs and monthly retainers','Social Blast: bulk TikTok posts at $25 to $40 each'],
+   watch:['Rep claimed under 5% late; the live campaign showed 30 to 40% late','Only about 20 creators at levels 2 and 3 in a real search; most have never completed a job','95% of brands use reimbursement: creator buys, gets paid back after approval','"$10 a video" quotes average in cheap follow-on pieces'],
+   win:['$60 to $70 per posted creator vs about $115','We run it; they hand you 17 jobs'],
+   lose:['Content-only files at $65 to $69','Rights and Spark codes in writing','Volume on demand'],
+   open:['Who applies at the $50 floor','Can a brand create a "Free Product + $5" job']},
+
+  {id:'joinbrandsm', name:'JoinBrands managed', x:60, y:20, side:'right', rights:'inc', tier:true, parent:'joinbrands',
+   kind:'JoinBrands\' managed service',
+   what:'Their team launches the campaign, briefs, hires, chases deadlines and reviews videos; the brand approves the final content. Under 20 of their 5,000 brands use it.',
+   price:'$4,000/mo on top of creator costs', rightsTxt:'Full transfer on payment'},
+
+  {id:'hfc', name:'Home From College', x:26, y:30, side:'left', rights:'inc',
+   kind:'Gen Z gig marketplace',
+   what:'Students apply to brand-posted GIGs, the brand picks and pays cash plus 20%. Students often have little audience, so it leans content, plus in-store work.',
+   price:'$49/mo Starter up to $15K/yr Premium', rightsTxt:'Full IP assignment, including paid media',
+   depth:'Paid Starter account end to end, plus a demo call with Larla',
+   who:'Brands wanting Gen Z content and IRL work: retail visits, demos, campus ambassadors. Nearly 1M student profiles on 3,500+ campuses. Santa Monica, $7M from GV. Operating entity JENZ INC.',
+   how:['AI writes a full GIG listing from one rough sentence','Students apply, brand reviews, signs the contractor agreement, pays','microGIG: AI-run tasks with results in 48 hours','No payment asked until the GIG is fully built'],
+   priceL:['Starter $49/mo (1 active participant), Standard $499/yr, Scale $999/yr','Premium $15K/yr at a 10% fee; Premium Plus $24K/yr at 2.9%; self-serve up to 20%','Rep\'s benchmark: about $150 for a polished TikTok post, rights included','Fully managed starts at $150K','No gifting-only: every gig pays cash'],
+   stands:['Backfills a student who misses a deadline; 2-strike policy for repeat offenders','Copy Checkout Link: a third party can pay without an account','Meta and TikTok integration pulls live post stats (Meta added about 2 months before our call)'],
+   watch:['Contract is between brand and student; HFC says it isn\'t a party','Brand can adjust pay at its sole discretion','Jargon never defined: GIG, microGIG, IQ, B-Card, Bestie','Confirmation email disagreed with checkout; the live billing page matched checkout'],
+   win:['Fully managed','Creators with real audiences'],
+   lose:['Physical-world work at scale','$49 entry for one or two posts'],
+   open:['Does the 20% apply to reimbursed purchases','Applicant volume for a $50 retail GIG']},
+
+  {id:'trend', name:'Trend / soona', pub:true, x:8, y:18, side:'right', rights:'inc',
+   kind:'Fixed-price content marketplace',
+   what:'Fixed-price video files, nothing posted. Trend is being folded into soona UGC.',
+   price:'Credit packs $550 to $3,872, expire in 12 months', rightsTxt:'Full licensing included',
+   depth:'Public pages and reviews only',
+   who:'Brands buying ad creative. Owned by soona since 2023.',
+   how:['Brand posts a free project, creators apply, brand ships and buys videos with credits','New campaigns move to soona UGC from Oct 1; Trend accounts close end of January 2027'],
+   priceL:['Credit packs: Starter $550 ($92 a video) to Scale $3,872 ($69 a video)','soona UGC: single videos from $89, no credit packs','Trend credits expire after 12 months'],
+   stands:['No negotiation, fixed prices','Licensing included at no cost'],
+   watch:['Reviews: no refunds when creators ghost, expired credits','Dates disagree: one public source says new campaigns move to soona Oct 1 and Trend accounts close January 2027; soona\'s own post says Trend access lasts through the end of 2026'],
+   win:['A real post to an audience','No expiring credits'],
+   lose:['Content-only files around $90'],
+   open:['Whether soona\'s $149 studio fee hits UGC orders']},
+
+  {id:'billo', name:'Billo', x:20, y:10, side:'left', rights:'inc',
+   kind:'Pay-per-video UGC',
+   what:'Brand buys finished video files from a prepaid wallet. Nothing is posted unless it buys a posting add-on.',
+   price:'Wallet packs $500 to $30,000', rightsTxt:'Unlimited rights, you own it once downloaded',
+   depth:'Demo call with Tomas, plus your own zero-credit account',
+   who:'Performance marketers buying ad creative. Claims 22,000+ brands (Glassdoor, Costco, Dr. Squatch). Lithuania and San Francisco.',
+   how:['Brand posts a brief, creators apply, brand picks and ships product','Buys finished 15 to 120 second videos from the wallet','Partnerships Hub for organic reach and partnership ads; CreativeOps for scripts, matching, variations, analytics'],
+   priceL:['Seven wallet packs, $500 to $30,000','Bonus: $300 at $2,500, $700 at $5,000, usable for 12 months','30-day money-back on every pack','About $99 per video entry','Signup requires your monthly ad-spend range'],
+   stands:['Per-creator ROAS, CTR and hook rate vs industry median','AI script generator explains its reasoning with real ad data','Neither JoinBrands nor Benable has either'],
+   watch:['Creator pool corrected on the call from 50,000 to 5,000, but the brief tool shows 24.7K US matches','Pricing page is behind a login','Entry price up about 68% in 18 months'],
+   win:['Real reach, not a file','Cheaper per posted creator'],
+   lose:['Owned ad assets with full rights','Creative performance data'],
+   open:['Creator-set posting fees','How 5,000 creators and 24.7K matches fit together']},
+  {id:'billom', name:'Billo managed', x:76, y:14, side:'right', rights:'inc', tier:true, parent:'billo',
+   kind:'Billo\'s managed service',
+   what:'Offered on the demo call, not priced. The $5K pack also comes with a dedicated success manager, but the brand still reviews applicants.',
+   price:'Not priced on the call; web research says from $2,000/mo', rightsTxt:'Same as Billo'},
+];
+
+const SRC_LABEL = {full:"Full research done", inside:"Inside the platform", demo:"Demo call", public:"Public information"};
+const SRC_NOTE = id => {
+  const t = byIdSafe(id);
+  if (t === 'benable') return '<div class="srcs"><span class="stag full">Our own offer</span></div>';
+  const r = SRC[t]; if (!r) return '';
+  const tags = r.map(k => `<span class="stag ${k}">${SRC_LABEL[k]}</span>`).join('');
+  const miss = r.includes('demo') ? '' : '<span class="stag none">No demo call yet</span>';
+  return `<div class="srcs">${tags}${miss}</div>`;
+};
+function byIdSafe(id){ const p = P.find(x=>x.id===id); return p && p.parent ? p.parent : id; }
+const SRC = {socialcat:["full","inside","demo","public"],joinbrands:["full","inside","demo","public"],hfc:["full","inside","demo","public"],billo:["full","inside","demo","public"],insense:["full","inside","demo","public"],collabstr:["full","inside","demo","public"],hummingbirds:["full","inside","public"],passionfroot:["full","inside","public"],kale:["full","public"],tribe:["full","public"],statusphere:["public"],stack:["public"],minisocial:["public"],tools:["public"],trend:["public"]};
+const RIGHTS = {inc:'Included', ext:'Costs extra', var:'Varies or unknown'};
+const QUADS = [
+  {key:'tl', name:'DIY reach', ax:'Buying audience · Self-managed', test:p=>p.y>=50&&p.x<50},
+  {key:'tr', name:'Done-for-you reach', ax:'Buying audience · Full-managed', test:p=>p.y>=50&&p.x>=50},
+  {key:'bl', name:'DIY content', ax:'Buying content · Self-managed', test:p=>p.y<50&&p.x<50},
+  {key:'br', name:'Done-for-you content', ax:'Buying content · Full-managed', test:p=>p.y<50&&p.x>=50},
+];
+
+const plot = document.getElementById('plot');
+const svg = document.getElementById('links');
+const panel = document.getElementById('gpanel');
+const prof = document.getElementById('profile');
+const byId = Object.fromEntries(P.map(p=>[p.id,p]));
+const esc = s => String(s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+let n = 0; const order = [];
+QUADS.forEach(q=>P.filter(q.test).sort((a,b)=>b.y-a.y).forEach(p=>{p.num=++n; order.push(p);}));
+const quadOf = p => QUADS.find(q=>q.test(p));
+const profileId = id => byId[id].parent || id;
+
+P.forEach(p=>{
+  if(p.parent && !p.noline){
+    const a = byId[p.parent];
+    const ln = document.createElementNS('http://www.w3.org/2000/svg','line');
+    ln.setAttribute('x1',a.x); ln.setAttribute('y1',100-a.y);
+    ln.setAttribute('x2',p.x); ln.setAttribute('y2',100-p.y);
+    ln.setAttribute('vector-effect','non-scaling-stroke');
+    svg.appendChild(ln);
+  }
+  const b = document.createElement('button');
+  b.type='button';
+  b.className = 'pt ' + p.rights + (p.tier?' tier':'') + (p.ben?' ben':'') + (p.pub?' pub':'') + (p.side==='left'?' left':'');
+  b.style.left = p.x+'%'; b.style.bottom = p.y+'%';
+  b.dataset.id = p.id;
+  b.setAttribute('aria-pressed','false');
+  b.setAttribute('aria-label', p.name);
+  b.innerHTML = `<span class="d"><span class="n">${p.num}</span></span><span class="l">${esc(p.name)}</span>`;
+  b.addEventListener('click',()=>select(p.id));
+  plot.appendChild(b);
+});
+
+const list = (title, arr) => arr && arr.length ? `<div><h4>${title}</h4><ul class="b">${arr.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>` : '';
+
+function renderProfile(id){
+  const p = byId[id];
+  const tiers = P.filter(t=>t.parent===id);
+  const tierLine = tiers.length ? tiers.map(t=>`${t.name}: ${t.price.charAt(0).toLowerCase()+t.price.slice(1)}. ${t.what}`) : [];
+  const vsTitleW = p.ben ? 'Where we win' : 'Where Benable wins';
+  const vsTitleX = p.ben ? 'Where others win' : `Where ${p.name} wins`;
+  prof.innerHTML = `
+    <div class="phead">
+      <div>
+        <div class="eyebrow">${p.num} · ${quadOf(p).name}</div>
+        <h3 id="prof-title">${esc(p.name)}</h3>
+        <div class="kind">${esc(p.kind)}</div>
+      </div>
+      
+    </div>
+    ${SRC_NOTE(p.id)}
+    <p class="who">${esc(p.who||'')}</p>
+    <div class="pgrid">
+      ${list('How it works', p.how)}
+      ${list('Price', p.priceL.concat(tierLine))}
+      ${list('Worth stealing', p.stands)}
+      ${list('Watch out for', p.watch)}
+    </div>
+    <div class="pgrid" style="margin-top:20px"><div><h4>Rights</h4><ul class="b"><li>${esc(p.rightsTxt)}</li></ul></div></div>
+    ${(p.win.length||p.lose.length)?`<div class="vs">
+      <div class="w"><h4>${esc(vsTitleW)}</h4><ul class="b">${p.win.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>
+      <div class="x"><h4>${esc(vsTitleX)}</h4><ul class="b">${p.lose.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>
+    </div>`:''}
+    ${p.open&&p.open.length?`<p class="openq"><strong>Still open:</strong> ${p.open.map(esc).join(' · ')}</p>`:''}`;
+}
+
+function select(id, opts={}){
+  if(!byId[id]) return;
+  const p = byId[id];
+  plot.querySelectorAll('.pt').forEach(el=>el.setAttribute('aria-pressed', el.dataset.id===id));
+  const q = quadOf(p);
+  panel.innerHTML = `
+    <div class="eyebrow">${p.num} · ${q.name}</div>
+    <h3>${esc(p.name)}</h3>
+    <div class="kind">${esc(p.kind)}</div>
+    ${SRC_NOTE(p.id)}
+    <p>${esc(p.what)}</p>
+    <dl class="facts">
+      <dt>Price</dt><dd>${esc(p.price)}</dd>
+      <dt>Rights</dt><dd><span class="chip${p.ben?' ben':''}">${RIGHTS[p.rights]}</span><br>${esc(p.rightsTxt)}</dd>
+      ${p.parent?`<dt>Base plan</dt><dd>${esc(byId[p.parent].name)}, self-serve</dd>`:''}
+    </dl>
+    <button type="button" class="btn" id="open-profile">Full profile</button>`;
+  document.getElementById('open-profile').addEventListener('click',openDrawer);
+  renderProfile(profileId(id));
+}
+
+document.getElementById('qgrid').innerHTML = QUADS.map(q=>`
+  <div class="qcard">
+    <h4>${q.name}</h4>
+    <div class="ax">${q.ax}</div>
+    <ul>${order.filter(q.test).map(p=>`
+      <li class="${p.ben?'is-ben':''}"><button type="button" data-id="${p.id}"><span class="num">${p.num}</span><span><strong>${esc(p.name)}</strong> <span class="sub">· ${esc(p.kind)}</span></span></button></li>`).join('')}
+    </ul>
+  </div>`).join('');
+document.querySelectorAll('#qgrid button').forEach(b=>b.addEventListener('click',()=>{
+  select(b.dataset.id);
+  openDrawer();
+}));
+
+const t = document.getElementById('show-tiers');
+t.addEventListener('change',()=>{
+  plot.classList.toggle('no-tiers', !t.checked);
+  const sel = plot.querySelector('.pt[aria-pressed="true"]');
+  if(!t.checked && sel && byId[sel.dataset.id].tier) select(byId[sel.dataset.id].parent);
+});
+
+
+const drawer=document.getElementById('drawer'), scrim=document.getElementById('scrim');
+let lastFocus=null;
+function openDrawer(){
+  lastFocus=document.activeElement;
+  drawer.hidden=false; scrim.hidden=false; document.body.classList.add('locked');
+  drawer.scrollTop=0; document.getElementById('close-drawer').focus();
+}
+function closeDrawer(){
+  drawer.hidden=true; scrim.hidden=true; document.body.classList.remove('locked');
+  if(lastFocus&&lastFocus.focus) lastFocus.focus();
+}
+document.getElementById('close-drawer').addEventListener('click',closeDrawer);
+scrim.addEventListener('click',closeDrawer);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!drawer.hidden) closeDrawer();});
+select('benable', {noHash:true});
+
+})();
+if (location.hash === "#team") showView("team");
 </script>
 </body>
 </html>
