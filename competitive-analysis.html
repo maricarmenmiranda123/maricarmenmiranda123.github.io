@@ -541,7 +541,6 @@ const BENTO = [
   { name: "Home From College", cost: "$194 / creator", managed: "From $150K", guarantee: "2-strike + backfill", rights: "Full (organic+paid)" },
   { name: "Collabstr", cost: "$271+ / creator", managed: "No (reminders only)", guarantee: "Escrow only", rights: "Included" },
   { name: "Insense", cost: "$450 / creator, managed", managed: "$4,600/mo add-on", guarantee: "No", rights: "Full" },
-  { name: "minisocial", cost: "$224-300 / creator", managed: "Yes, included", guarantee: "1 rebooking round", rights: "Full + 30 days of ads" },
   { name: "Social Cat", cost: "$750+ / creator, managed", managed: "$250/collab add-on", guarantee: "No", rights: "Opted-in creators only" },
 ];
 
@@ -577,7 +576,6 @@ const PE_GROUPS = [
   { key: "managed", title: "Managed: they do the work", sub: "your team only approves creators and content", rows: [
     { name: "Benable", note: "gifted, cheaper with scale", lo: 50, hi: 80, mid: 60, us: true },
     { name: "JoinBrands managed", note: "$4,000/mo + $25 videos + 15%", lo: 69, hi: 229, mid: 69, rangeNote: "at 100 creators, $229 at 20" },
-    { name: "minisocial Pro", note: "$3,000 for 10 to $11,200 for 50", lo: 224, hi: 300, mid: 300, rangeNote: "at 10 creators, $224 at 50; product may be extra" },
     { name: "Insense managed", note: "$4,600/mo for 20 creators", lo: 450, hi: 450, mid: 450 },
     { name: "Agency", note: "Collabstr's estimate: $5,000 for 10", lo: 500, hi: 500, mid: 500 },
     { name: "Social Cat managed", note: "$250 fee + creator budget", lo: 750, hi: 800, mid: 750 },
@@ -1050,7 +1048,7 @@ function updateStrip(key) {
     document.getElementById("row-videos-" + key).textContent = money(N * 25);
     document.getElementById("row-fee-" + key).textContent = money(N * 25 * 0.15);
   } else {
-    them = d.themRate * N; us = benRate(N) * N;
+    them = (d.themFn ? d.themFn(N) : d.themRate) * N; us = benRate(N) * N;
   }
   const pct = Math.round((1 - us / them) * 100);
   document.getElementById("them-total-" + key).textContent = money(them);
