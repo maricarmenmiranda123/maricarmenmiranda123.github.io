@@ -541,6 +541,7 @@ const BENTO = [
   { name: "Home From College", cost: "$194 / creator", managed: "From $150K", guarantee: "2-strike + backfill", rights: "Full (organic+paid)" },
   { name: "Collabstr", cost: "$271+ / creator", managed: "No (reminders only)", guarantee: "Escrow only", rights: "Included" },
   { name: "Insense", cost: "$450 / creator, managed", managed: "$4,600/mo add-on", guarantee: "No", rights: "Full" },
+  { name: "minisocial", cost: "$224-300 / creator", managed: "Yes, included", guarantee: "1 rebooking round", rights: "Full + 30 days of ads" },
   { name: "Social Cat", cost: "$750+ / creator, managed", managed: "$250/collab add-on", guarantee: "No", rights: "Opted-in creators only" },
 ];
 
@@ -576,6 +577,7 @@ const PE_GROUPS = [
   { key: "managed", title: "Managed: they do the work", sub: "your team only approves creators and content", rows: [
     { name: "Benable", note: "gifted, cheaper with scale", lo: 50, hi: 80, mid: 60, us: true },
     { name: "JoinBrands managed", note: "$4,000/mo + $25 videos + 15%", lo: 69, hi: 229, mid: 69, rangeNote: "at 100 creators, $229 at 20" },
+    { name: "minisocial Pro", note: "$3,000 for 10 to $11,200 for 50", lo: 224, hi: 300, mid: 300, rangeNote: "at 10 creators, $224 at 50; product may be extra" },
     { name: "Insense managed", note: "$4,600/mo for 20 creators", lo: 450, hi: 450, mid: 450 },
     { name: "Agency", note: "Collabstr's estimate: $5,000 for 10", lo: 500, hi: 500, mid: 500 },
     { name: "Social Cat managed", note: "$250 fee + creator budget", lo: 750, hi: 800, mid: 750 },
@@ -785,7 +787,7 @@ function renderAllPanel() {
     </div>
     <div class="pe-card">
       <div id="pe-body"></div>
-      <p class="pe-note">The bar shows the all-in price, on a log scale. Ranges run low to high on each platform's own numbers from our demo calls; the dot is the typical case. Benable is $50 to $80 a creator depending on volume. Paid ad rights are extra on Benable ($25 to $75 a video) and included on most others.</p>
+      <p class="pe-note">The bar shows the all-in price, on a log scale. Ranges run low to high on each platform's own numbers from our research; the dot is the typical case. Benable is $50 to $80 a creator depending on volume. Paid ad rights are extra on Benable ($25 to $75 a video) and included on most others.</p>
     </div>
   `;
 }
@@ -1259,19 +1261,18 @@ const P = [
    lose:['Retail sell-through proof for buyers','Receipt-verified cash-back Offers'],
    open:['Platform fee and minimums','Cost per Offer redemption','What a CPG answer path shows']},
 
-  {id:'minisocial', name:'minisocial', pub:true, x:74, y:42, side:'left', rights:'inc',
+  {id:'minisocial', name:'minisocial', x:74, y:42, side:'left', rights:'inc',
    kind:'Managed micro-influencer + UGC',
-   what:'Paid creators post, and the brand also gets fully licensed files plus 30 days of ad access. Sells the post and the content together.',
-   price:'From $3,000 for 10 creators', rightsTxt:'Perpetual, plus 30 days of ad codes',
-   depth:'Public pages and MSA only',
-   who:'DTC brands like Olipop, Native, Kopari, MeUndies. Founded 2018.',
-   how:['Pro Campaign: paid creators post','Seeding Campaign: gifting only, their contract says about 50% throughput','Everything inside a signed MSA'],
-   priceL:['"$3,000 for a campaign of 10 creators," creator pay included','About $300 per creator','Service fee non-refundable; net-15 invoice'],
-   stands:['Perpetual license plus 30 days of Spark, whitelisting and partnership ads','Written replacement or credit on the creator-pay part'],
-   watch:['Only 7% to 33% of the price seems to reach the creator'],
-   win:['3x to 5x cheaper per posted creator','Same "we run it" promise'],
-   lose:['Signed MSA, rights and ad codes included','Written make-good'],
-   open:['Deliverables per creator','Seeding price','Volume pricing at 25 and 50']},
+   what:'Fully managed: minisocial hand-picks creators, the brand approves them and the content, creators post and hand over ad codes. Sold per campaign, no subscription.',
+   price:'Pro: $3,000 for 10 creators up to $11,200 for 50', rightsTxt:'Fully licensed content ("anywhere and for as long as you want"), plus 30 days of whitelisting',
+   who:'Says it\'s the original platform, launched 2018. Claims 40,000 creators "vetted twice", 1,000+ brands and agencies, 500K+ collaborations. Case studies: Ceremonia, Beam, Magic Spoon, DailyLook. Came up when Phyla compared it and Skeepers before choosing Benable.',
+   how:['8-step brief builder: brand, package and scope, offer, ask, content, creators, timing, review. Or brief it live on a call','minisocial hand-picks creators; the brand approves them','They run creator communication and follow-ups; the brand approves content, with 1 revision round','Creators post, then share Meta or TikTok ad codes; files are licensed and downloadable','No payment upfront: after saving, "We\'ll reach back to you with the payment details"','4 to 6 weeks from briefing to content'],
+   priceL:['Pro (national): 10 creators $3,000, 20 $5,500, 35 $8,700, 50 $11,200, about $225 to $300 a creator','Local (cities, states, regions, "for retail, service businesses"): 5 for $2,500, 10 $4,000, 20 $7,500, 35 $12,250, about $350 to $500 a creator','Premium: Pro plus options for targeting, platform, deliverables, review rounds and whitelisting length. $3,000 to $11,250 at default settings; add-on prices not seen','FAQ: "starts at $3,000 for 10 creators, inclusive of all creator fees"; project-based, no long-term commitments','The product or credit the brand gives creators may be on top (unconfirmed)'],
+   stands:['Package cards spell out what\'s included in every plan: 1 deliverable, 1 re-shoot, 30 days of whitelisting, 1 creator rebooking','Scope picker shows price and estimated reach for each creator count','Expert Briefs from Eli Weiss, Marketing Max, Nik Sharma and Ari Murray, plus category deep dives and a "Drive to Retail" guide','Offer can be shipped product, a credit or gift card to buy "online or in person", or no product'],
+   watch:['In-store is a real use case: the Local package, credits to buy in person, the Ayoh Whole Foods launch and Rocksbox cases','No 25-creator option: the closest are 20 for $5,500 (Pro) or $7,500 (Local)','Sold per campaign; repeat or retainer pricing unknown, so don\'t call it "one-off"','Nothing seen about events either way'],
+   win:['Benable quoted Phyla $2,000 for 25 creators ($80 each) vs $5,500 for 20 on Pro','Their smallest option (5 creators, Local, $2,500) costs more than Benable\'s 25'],
+   lose:['Licensing and 30 days of whitelisting included in every plan; Benable\'s paid rights are $25 to $75 a video','Local, geo-targeted packages built in','Clear package prices inside the product'],
+   open:['Is the $100 credit per creator billed on top? Check when payment details arrive for the test campaign ("Benable Creator Recs, Fall 2026", Pro, 10 creators, Oct 9 to 23)','What Premium add-ons cost','Repeat or retainer pricing']},
 
   {id:'kale', name:'Kale', x:56, y:90, side:'right', rights:'var',
    kind:'Pays customers per post',
@@ -1458,7 +1459,7 @@ const SRC_NOTE = id => {
   return `<div class="srcs">${tags}${miss}</div>`;
 };
 function byIdSafe(id){ const p = P.find(x=>x.id===id); return p && p.parent ? p.parent : id; }
-const SRC = {socialcat:["full","inside","demo","public"],joinbrands:["full","inside","demo","public"],hfc:["full","inside","demo","public"],billo:["full","inside","demo","public"],insense:["full","inside","demo","public"],collabstr:["full","inside","demo","public"],hummingbirds:["full","inside","public"],passionfroot:["full","inside","public"],kale:["full","public"],tribe:["full","public"],statusphere:["public"],stack:["public"],minisocial:["public"],tools:["public"],trend:["public"]};
+const SRC = {socialcat:["full","inside","demo","public"],joinbrands:["full","inside","demo","public"],hfc:["full","inside","demo","public"],billo:["full","inside","demo","public"],insense:["full","inside","demo","public"],collabstr:["full","inside","demo","public"],hummingbirds:["full","inside","public"],passionfroot:["full","inside","public"],kale:["full","public"],tribe:["full","public"],statusphere:["public"],stack:["public"],minisocial:["full","inside","public"],tools:["public"],trend:["public"]};
 const RIGHTS = {inc:'Included', ext:'Costs extra', var:'Varies or unknown'};
 const QUADS = [
   {key:'tl', name:'DIY reach', ax:'Buying audience · Self-managed', test:p=>p.y>=50&&p.x<50},
